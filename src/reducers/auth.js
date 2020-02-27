@@ -1,8 +1,7 @@
-import { REGISTER_SUCCESS } from '../actions/actionTypes';
+import { REGISTER_SUCCESS, LOGIN_SUCCESS, LOGOUT_SUCCESS } from '../actions/actionTypes';
 
 const initialState = {
   token: null,
-  isSuccessfullSubmit: true,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -10,7 +9,17 @@ const authReducer = (state = initialState, action) => {
     case REGISTER_SUCCESS:
       return {
         ...state,
-        token: action.payload,
+        token: action.token,
+      };
+    case LOGIN_SUCCESS:
+      return {
+        ...state,
+        token: action.token,
+      };
+    case LOGOUT_SUCCESS:
+      return {
+        ...state,
+        token: null,
       };
     default:
       return state;

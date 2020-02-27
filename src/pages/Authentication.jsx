@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 
@@ -10,8 +10,10 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import styled from 'styled-components/macro';
+
 import { register } from '../actions/register';
 import { login } from '../actions/login';
+import autoLogin from '../actions/autoLogin';
 
 const StyledAuthentication = styled.div`
   display: flex;
@@ -60,6 +62,11 @@ const validationSchema = Yup.object().shape({
 });
 
 class Authentication extends Component {
+  componentDidMount = () => {
+    const { authAutoLogin } = this.props;
+    authAutoLogin();
+  };
+
   handleFormSubmit = (values, setErrors, isSignUp) => {
     const { authLogin, authRegister } = this.props;
     if (isSignUp) {
@@ -70,17 +77,15 @@ class Authentication extends Component {
   };
 
   render() {
-    const { match, isSuccessfullSubmit } = this.props;
+    const { match, isAutheticated } = this.props;
     const isSignUp = match.path === '/blog/signup';
     const pageTitle = isSignUp ? 'Sign Up' : 'Sign In';
     const descriptionLink = isSignUp ? '/blog/login' : '/blog/signup';
     const descriptionText = isSignUp ? 'Have an account?' : 'Need an account?';
 
-    console.log(isSuccessfullSubmit);
-
-    // if (isSignUp && true) {
-    //   return <Redirect to="/blog" />;
-    // }
+    if (isAutheticated) {
+      return <Redirect to="/blog" />;
+    }
 
     return (
       <StyledAuthentication>
@@ -156,22 +161,24 @@ class Authentication extends Component {
   }
 }
 
-const mapStateToProps = ({ isSuccessfullSubmit }) => {
-  return { isSuccessfullSubmit };
+const mapStateToProps = ({ auth }) => {
+  return { isAutheticated: !!auth.token };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     authLogin: (values, setErrors) => dispatch(login(values, setErrors)),
     authRegister: (values, setErrors) => dispatch(register(values, setErrors)),
+    authAutoLogin: () => dispatch(autoLogin()),
   };
 };
 
 Authentication.propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,
-  isSuccessfullSubmit: PropTypes.bool.isRequired,
+  isAutheticated: PropTypes.bool.isRequired,
   authLogin: PropTypes.func.isRequired,
   authRegister: PropTypes.func.isRequired,
+  authAutoLogin: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Authentication);

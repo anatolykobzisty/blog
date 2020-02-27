@@ -1,7 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link, NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Button } from 'antd';
 
 import styled from 'styled-components/macro';
+
+import { logout } from '../actions/logout';
 
 const StyledNavBar = styled.div`
   display: flex;
@@ -11,7 +16,7 @@ const StyledNavBar = styled.div`
 const Logo = styled(Link)`
   font-weight: bold;
   color: white;
-  font-size: 20px;
+  font-size: 25px;
   :hover {
     color: black;
   }
@@ -19,6 +24,7 @@ const Logo = styled(Link)`
 
 const Menu = styled.ul`
   display: flex;
+  align-items: center;
 `;
 
 const MenuItem = styled.li`
@@ -35,7 +41,11 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
-const NavBar = () => {
+const Logout = styled(Button)`
+  margin-left: 30px;
+`;
+
+const NavBar = ({ isAutheticated, authLogout }) => {
   return (
     <StyledNavBar>
       <Logo to="/blog">Blog</Logo>
@@ -45,15 +55,36 @@ const NavBar = () => {
             Home
           </StyledNavLink>
         </MenuItem>
-        <MenuItem>
-          <StyledNavLink to="/blog/login">Sign in</StyledNavLink>
-        </MenuItem>
-        <MenuItem>
-          <StyledNavLink to="/blog/signup">Sign up</StyledNavLink>
-        </MenuItem>
+        {isAutheticated ? (
+          <Logout onClick={() => authLogout()}>Logout</Logout>
+        ) : (
+          <>
+            <MenuItem>
+              <StyledNavLink to="/blog/login">Sign in</StyledNavLink>
+            </MenuItem>
+            <MenuItem>
+              <StyledNavLink to="/blog/signup">Sign up</StyledNavLink>
+            </MenuItem>
+          </>
+        )}
       </Menu>
     </StyledNavBar>
   );
 };
 
-export default NavBar;
+const mapStateToProps = ({ auth }) => {
+  return { isAutheticated: !!auth.token };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    authLogout: () => dispatch(logout()),
+  };
+};
+
+NavBar.propTypes = {
+  isAutheticated: PropTypes.bool.isRequired,
+  authLogout: PropTypes.func.isRequired,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavBar);

@@ -43,7 +43,7 @@ ReactDOM.render(
               <NavBar />
             </StyledHeader>
             <Content />
-            <StyledFooter>Ant Design © {new Date().getFullYear()} Created by Ant UED</StyledFooter>
+            <StyledFooter>Blog © {new Date().getFullYear()}</StyledFooter>
           </Layout>
         </Router>
       </ErrorBoundry>
