@@ -1,0 +1,64 @@
+{
+  "name": "blog",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "https://anatolykobzisty.github.io/blog/",
+  "dependencies": {
+    "antd": "^3.26.9",
+    "axios": "^0.19.1",
+    "date-fns": "^2.9.0",
+    "formik": "^2.1.4",
+    "lodash": "^4.17.15",
+    "prop-types": "^15.7.2",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-redux": "^7.2.0",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.4.0",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
+    "styled-components": "^4.4.1",
+    "styled-normalize": "^8.0.6",
+    "yup": "^0.28.1"
+  },
+  "scripts": {
+    "start": "BROWSER=none react-scripts start",
+    "build": "react-scripts build",
+    "lint": "node_modules/.bin/eslint --ext jsx src",
+    "lint:fix": "node_modules/.bin/eslint --fix --ext jsx src",
+    "deploy": "npm run build && gh-pages -d build"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.3",
+    "babel-plugin-macros": "^2.8.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.17.0",
+    "gh-pages": "^2.1.1",
+    "husky": "^3.1.0",
+    "prettier": "^1.19.1"
+  }
+}
