@@ -13,7 +13,6 @@ import styled from 'styled-components/macro';
 
 import { register } from '../actions/register';
 import { login } from '../actions/login';
-import autoLogin from '../actions/autoLogin';
 
 const StyledAuthentication = styled.div`
   display: flex;
@@ -62,11 +61,6 @@ const validationSchema = Yup.object().shape({
 });
 
 class Authentication extends Component {
-  componentDidMount = () => {
-    const { authAutoLogin } = this.props;
-    authAutoLogin();
-  };
-
   handleFormSubmit = (values, setErrors, isSignUp) => {
     const { authLogin, authRegister } = this.props;
     if (isSignUp) {
@@ -169,7 +163,6 @@ const mapDispatchToProps = dispatch => {
   return {
     authLogin: (values, setErrors) => dispatch(login(values, setErrors)),
     authRegister: (values, setErrors) => dispatch(register(values, setErrors)),
-    authAutoLogin: () => dispatch(autoLogin()),
   };
 };
 
@@ -178,7 +171,6 @@ Authentication.propTypes = {
   isAutheticated: PropTypes.bool.isRequired,
   authLogin: PropTypes.func.isRequired,
   authRegister: PropTypes.func.isRequired,
-  authAutoLogin: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Authentication);

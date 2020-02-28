@@ -8,11 +8,15 @@ import { Layout } from 'antd';
 import styled from 'styled-components/macro';
 import GlobalStyle from './components/GlobalStyle';
 
+import autoLogin from './actions/autoLogin';
+
 import ErrorBoundry from './components/ErrorBoundry';
 import NavBar from './components/NavBar';
 import Content from './components/Content';
 
 import store from './store';
+
+store.dispatch(autoLogin());
 
 const { Header, Footer } = Layout;
 
