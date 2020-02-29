@@ -22,7 +22,13 @@ const { Header, Footer } = Layout;
 const StyledHeader = styled(Header)`
   background: #1890ff;
   color: #ffffff;
-  padding: 0 150px;
+  padding: 0 60px;
+  @media screen and (min-width: 480px) {
+    padding: 0 80px;
+  }
+  @media screen and (min-width: 768px) {
+    padding: 0 100px;
+  }
 `;
 
 const StyledFooter = styled(Footer)`

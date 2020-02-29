@@ -10,15 +10,25 @@ import logout from '../actions/logout';
 
 const StyledNavBar = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  @media screen and (min-width: 480px) {
+    justify-content: space-between;
+  }
 `;
 
-const Logo = styled(Link)`
-  font-weight: bold;
-  color: white;
-  font-size: 25px;
-  :hover {
-    color: black;
+const Logo = styled(Link).attrs({
+  'aria-hidden': true,
+})`
+  display: none;
+
+  @media screen and (min-width: 480px) {
+    display: inline-block;
+    font-weight: bold;
+    color: white;
+    font-size: 25px;
+    :hover {
+      color: black;
+    }
   }
 `;
 
@@ -28,7 +38,7 @@ const Menu = styled.ul`
 `;
 
 const MenuItem = styled.li`
-  margin-right: 10px;
+  margin-right: 30px;
   :last-child {
     margin-right: 0;
   }
@@ -42,7 +52,7 @@ const StyledNavLink = styled(NavLink)`
 `;
 
 const Logout = styled(Button)`
-  margin-left: 30px;
+  margin-left: 140px;
 `;
 
 const NavBar = ({ isAutheticated, authLogout }) => {
