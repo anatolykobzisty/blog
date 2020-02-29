@@ -41,7 +41,7 @@ const FormItem = styled.div`
   margin-bottom: 20px;
 `;
 
-const ErrorMessage = styled.span`
+const ErrorMessage = styled.div`
   color: red;
 `;
 
@@ -71,18 +71,16 @@ class Authentication extends Component {
   };
 
   render() {
-    const {
-      match,
-      isAutheticated,
-      isLoading,
-      errorMsgUsername,
-      errorMsgEmail,
-      errorMsgLogin,
-    } = this.props;
+    const { match, isAutheticated, isLoading, authErrors } = this.props;
     const isSignUp = match.path === '/blog/signup';
     const pageTitle = isSignUp ? 'Sign Up' : 'Sign In';
     const descriptionLink = isSignUp ? '/blog/login' : '/blog/signup';
     const descriptionText = isSignUp ? 'Have an account?' : 'Need an account?';
+    const errorMsgUsername = authErrors.username ? authErrors.username[0] : null;
+    const errorMsgEmail = authErrors.email ? authErrors.email[0] : null;
+    const errorMsgLogin = authErrors['email or password']
+      ? authErrors['email or password'][0]
+      : null;
 
     if (isAutheticated) {
       return <Redirect to="/blog" />;
@@ -118,7 +116,9 @@ class Authentication extends Component {
                         onBlur={handleBlur}
                         prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                       />
-                      {errorMsgUsername && <ErrorMessage>{errorMsgUsername}</ErrorMessage>}
+                      {errorMsgUsername && (
+                        <ErrorMessage>Username {errorMsgUsername} </ErrorMessage>
+                      )}
                       {touched.username && errors.username && (
                         <ErrorMessage>{errors.username}</ErrorMessage>
                       )}
@@ -134,7 +134,7 @@ class Authentication extends Component {
                       onBlur={handleBlur}
                       prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
                     />
-                    {errorMsgEmail && <ErrorMessage>{errorMsgEmail}</ErrorMessage>}
+                    {errorMsgEmail && <ErrorMessage>Email {errorMsgEmail} </ErrorMessage>}
                     {touched.email && errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
                   </FormItem>
                   <FormItem>
@@ -147,7 +147,9 @@ class Authentication extends Component {
                       onBlur={handleBlur}
                       prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                     />
-                    {errorMsgLogin && <ErrorMessage>{errorMsgLogin}</ErrorMessage>}
+                    {errorMsgLogin && (
+                      <ErrorMessage>Email or password {errorMsgLogin} </ErrorMessage>
+                    )}
                     {touched.password && errors.password && (
                       <ErrorMessage>{errors.password}</ErrorMessage>
                     )}
@@ -169,11 +171,7 @@ const mapStateToProps = ({ auth }) => {
   return {
     isAutheticated: !!auth.token,
     isLoading: auth.loading,
-    errorMsgUsername: auth.errors.username ? auth.errors.username[0] : null,
-    errorMsgEmail: auth.errors.email ? auth.errors.email[0] : null,
-    errorMsgLogin: auth.errors['email or password']
-      ? `email or password ${auth.errors['email or password'][0]}`
-      : null,
+    authErrors: auth.errors,
   };
 };
 
@@ -188,6 +186,7 @@ Authentication.propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,
   isAutheticated: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
+  authErrors: PropTypes.objectOf(PropTypes.array).isRequired,
   authLogin: PropTypes.func.isRequired,
   authRegister: PropTypes.func.isRequired,
 };
