@@ -6,7 +6,7 @@ import { Button } from 'antd';
 
 import styled from 'styled-components/macro';
 
-import { logout } from '../actions/logout';
+import logout from '../actions/logout';
 
 const StyledNavBar = styled.div`
   display: flex;
@@ -46,6 +46,10 @@ const Logout = styled(Button)`
 `;
 
 const NavBar = ({ isAutheticated, authLogout }) => {
+  const handleClick = () => {
+    localStorage.removeItem('token');
+    authLogout();
+  };
   return (
     <StyledNavBar>
       <Logo to="/blog">Blog</Logo>
@@ -56,7 +60,7 @@ const NavBar = ({ isAutheticated, authLogout }) => {
           </StyledNavLink>
         </MenuItem>
         {isAutheticated ? (
-          <Logout onClick={() => authLogout()}>Logout</Logout>
+          <Logout onClick={handleClick}>Log out</Logout>
         ) : (
           <>
             <MenuItem>

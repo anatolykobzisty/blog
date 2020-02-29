@@ -1,12 +1,9 @@
-import { LOGOUT_SUCCESS } from './actionTypes';
+import { LOGOUT } from './actionTypes';
 
-export const logoutSuccess = () => {
+const logout = () => {
   return {
-    type: LOGOUT_SUCCESS,
+    type: LOGOUT,
   };
 };
 
-export const logout = () => dispatch => {
-  localStorage.removeItem('token');
-  dispatch(logoutSuccess());
-};
+export default logout;

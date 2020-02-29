@@ -10,7 +10,6 @@ import GlobalStyle from './components/GlobalStyle';
 
 import autoLogin from './actions/autoLogin';
 
-import ErrorBoundry from './components/ErrorBoundry';
 import NavBar from './components/NavBar';
 import Content from './components/Content';
 
@@ -39,18 +38,16 @@ const StyledFooter = styled(Footer)`
 ReactDOM.render(
   <>
     <Provider store={store}>
-      <ErrorBoundry>
-        <GlobalStyle />
-        <Router>
-          <Layout>
-            <StyledHeader>
-              <NavBar />
-            </StyledHeader>
-            <Content />
-            <StyledFooter>Blog © {new Date().getFullYear()}</StyledFooter>
-          </Layout>
-        </Router>
-      </ErrorBoundry>
+      <GlobalStyle />
+      <Router>
+        <Layout>
+          <StyledHeader>
+            <NavBar />
+          </StyledHeader>
+          <Content />
+          <StyledFooter>Blog © {new Date().getFullYear()}</StyledFooter>
+        </Layout>
+      </Router>
     </Provider>
   </>,
   document.getElementById('root')

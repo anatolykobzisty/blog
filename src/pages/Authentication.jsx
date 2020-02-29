@@ -61,17 +61,24 @@ const validationSchema = Yup.object().shape({
 });
 
 class Authentication extends Component {
-  handleFormSubmit = (values, setErrors, isSignUp) => {
+  handleFormSubmit = (values, isSignUp) => {
     const { authLogin, authRegister } = this.props;
     if (isSignUp) {
-      authRegister(values, setErrors);
+      authRegister(values);
     } else {
-      authLogin(values, setErrors);
+      authLogin(values);
     }
   };
 
   render() {
-    const { match, isAutheticated } = this.props;
+    const {
+      match,
+      isAutheticated,
+      isLoading,
+      errorMsgUsername,
+      errorMsgEmail,
+      errorMsgLogin,
+    } = this.props;
     const isSignUp = match.path === '/blog/signup';
     const pageTitle = isSignUp ? 'Sign Up' : 'Sign In';
     const descriptionLink = isSignUp ? '/blog/login' : '/blog/signup';
@@ -94,7 +101,7 @@ class Authentication extends Component {
               email: 'noname2020@mail.com',
               password: '8Nkl8dsp',
             }}
-            onSubmit={(values, { setErrors }) => this.handleFormSubmit(values, setErrors, isSignUp)}
+            onSubmit={values => this.handleFormSubmit(values, isSignUp)}
             validationSchema={validationSchema}
           >
             {({ handleSubmit, values, handleChange, handleBlur, touched, errors }) => {
@@ -111,6 +118,7 @@ class Authentication extends Component {
                         onBlur={handleBlur}
                         prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                       />
+                      {errorMsgUsername && <ErrorMessage>{errorMsgUsername}</ErrorMessage>}
                       {touched.username && errors.username && (
                         <ErrorMessage>{errors.username}</ErrorMessage>
                       )}
@@ -126,6 +134,7 @@ class Authentication extends Component {
                       onBlur={handleBlur}
                       prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
                     />
+                    {errorMsgEmail && <ErrorMessage>{errorMsgEmail}</ErrorMessage>}
                     {touched.email && errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
                   </FormItem>
                   <FormItem>
@@ -138,11 +147,12 @@ class Authentication extends Component {
                       onBlur={handleBlur}
                       prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                     />
+                    {errorMsgLogin && <ErrorMessage>{errorMsgLogin}</ErrorMessage>}
                     {touched.password && errors.password && (
                       <ErrorMessage>{errors.password}</ErrorMessage>
                     )}
                   </FormItem>
-                  <Button type="primary" htmlType="submit" block>
+                  <Button type="primary" htmlType="submit" loading={isLoading} block>
                     {pageTitle}
                   </Button>
                 </Form>
@@ -156,19 +166,28 @@ class Authentication extends Component {
 }
 
 const mapStateToProps = ({ auth }) => {
-  return { isAutheticated: !!auth.token };
+  return {
+    isAutheticated: !!auth.token,
+    isLoading: auth.loading,
+    errorMsgUsername: auth.errors.username ? auth.errors.username[0] : null,
+    errorMsgEmail: auth.errors.email ? auth.errors.email[0] : null,
+    errorMsgLogin: auth.errors['email or password']
+      ? `email or password ${auth.errors['email or password'][0]}`
+      : null,
+  };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    authLogin: (values, setErrors) => dispatch(login(values, setErrors)),
-    authRegister: (values, setErrors) => dispatch(register(values, setErrors)),
+    authLogin: values => dispatch(login(values)),
+    authRegister: values => dispatch(register(values)),
   };
 };
 
 Authentication.propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,
   isAutheticated: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired,
   authLogin: PropTypes.func.isRequired,
   authRegister: PropTypes.func.isRequired,
 };

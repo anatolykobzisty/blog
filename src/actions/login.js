@@ -1,5 +1,11 @@
-import axios from 'axios';
-import { LOGIN_SUCCESS } from './actionTypes';
+import axios from '../axios';
+import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE } from './actionTypes';
+
+export const loginRequest = () => {
+  return {
+    type: LOGIN_REQUEST,
+  };
+};
 
 export const loginSuccess = token => {
   return {
@@ -8,8 +14,15 @@ export const loginSuccess = token => {
   };
 };
 
-export const login = ({ email, password }, setErrors) => async dispatch => {
-  // dispatch(registerRequest());
+export const loginFailure = errors => {
+  return {
+    type: LOGIN_FAILURE,
+    errors,
+  };
+};
+
+export const login = ({ email, password }) => async dispatch => {
+  dispatch(loginRequest());
   const loginData = {
     user: {
       email,
@@ -17,16 +30,13 @@ export const login = ({ email, password }, setErrors) => async dispatch => {
     },
   };
   try {
-    const response = await axios.post(
-      'https://conduit.productionready.io/api/users/login/',
-      loginData
-    );
+    const response = await axios.post('/users/login/', loginData);
     const user = await response.data.user;
     const token = await user.token;
     localStorage.setItem('token', token);
     dispatch(loginSuccess(token));
   } catch (error) {
-    setErrors({ ...error.response.data.errors });
-    // dispatch(registerFailure());
+    const { errors } = error.response.data;
+    dispatch(loginFailure(errors));
   }
 };

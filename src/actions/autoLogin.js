@@ -1,4 +1,4 @@
-import { logout } from './logout';
+import logout from './logout';
 import { loginSuccess } from './login';
 
 const autoLogin = () => dispatch => {
