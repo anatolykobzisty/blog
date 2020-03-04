@@ -7,10 +7,10 @@ export const loginRequest = () => {
   };
 };
 
-export const loginSuccess = token => {
+export const loginSuccess = user => {
   return {
     type: LOGIN_SUCCESS,
-    token,
+    user,
   };
 };
 
@@ -34,7 +34,7 @@ export const login = ({ email, password }) => async dispatch => {
     const user = await response.data.user;
     const token = await user.token;
     localStorage.setItem('token', token);
-    dispatch(loginSuccess(token));
+    dispatch(loginSuccess(user));
   } catch (error) {
     const { errors } = error.response.data;
     dispatch(loginFailure(errors));

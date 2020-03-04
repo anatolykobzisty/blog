@@ -8,10 +8,10 @@ export const registerRequest = () => {
   };
 };
 
-export const registerSuccess = token => {
+export const registerSuccess = user => {
   return {
     type: REGISTER_SUCCESS,
-    token,
+    user,
   };
 };
 
@@ -36,7 +36,7 @@ export const register = ({ username, email, password }) => async dispatch => {
     const user = await response.data.user;
     const token = await user.token;
     localStorage.setItem('token', token);
-    dispatch(registerSuccess(token));
+    dispatch(registerSuccess(user));
   } catch (error) {
     const { errors } = error.response.data;
     dispatch(registerFailure(errors));

@@ -9,35 +9,29 @@ import styled from 'styled-components/macro';
 import logout from '../actions/logout';
 
 const StyledNavBar = styled.div`
+  width: 100%;
   display: flex;
-  justify-content: center;
-  @media screen and (min-width: 480px) {
-    justify-content: space-between;
-  }
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
 `;
 
-const Logo = styled(Link).attrs({
-  'aria-hidden': true,
-})`
-  display: none;
-
-  @media screen and (min-width: 480px) {
-    display: inline-block;
-    font-weight: bold;
-    color: white;
-    font-size: 25px;
-    :hover {
-      color: black;
-    }
+const Logo = styled(Link)`
+  font-weight: bold;
+  color: white;
+  font-size: 25px;
+  :hover {
+    color: black;
   }
 `;
 
 const Menu = styled.ul`
   display: flex;
-  align-items: center;
 `;
 
 const MenuItem = styled.li`
+  display: flex;
+  align-items: center;
   margin-right: 30px;
   :last-child {
     margin-right: 0;
@@ -51,28 +45,21 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
-const Logout = styled(Button)`
-  margin-left: 140px;
-`;
-
-const NavBar = ({ isAutheticated, authLogout }) => {
+const NavBar = ({ isAutheticated, user, authLogout }) => {
   const handleClick = () => {
-    localStorage.removeItem('token');
     authLogout();
   };
   return (
     <StyledNavBar>
       <Logo to="/blog">Blog</Logo>
       <Menu>
-        <MenuItem>
-          <StyledNavLink to="/blog" exact>
-            Home
-          </StyledNavLink>
-        </MenuItem>
-        {isAutheticated ? (
-          <Logout onClick={handleClick}>Log out</Logout>
-        ) : (
+        {isAutheticated ? null : (
           <>
+            <MenuItem>
+              <StyledNavLink to="/blog" exact>
+                Home
+              </StyledNavLink>
+            </MenuItem>
             <MenuItem>
               <StyledNavLink to="/blog/login">Sign in</StyledNavLink>
             </MenuItem>
@@ -81,13 +68,26 @@ const NavBar = ({ isAutheticated, authLogout }) => {
             </MenuItem>
           </>
         )}
+        {isAutheticated ? (
+          <>
+            <MenuItem>
+              <Button onClick={handleClick}>Log out</Button>
+            </MenuItem>
+            <MenuItem>
+              <span>{user}</span>
+            </MenuItem>
+          </>
+        ) : null}
       </Menu>
     </StyledNavBar>
   );
 };
 
 const mapStateToProps = ({ auth }) => {
-  return { isAutheticated: !!auth.token };
+  return {
+    isAutheticated: !!auth.currentUser.token,
+    user: auth.currentUser.username,
+  };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -98,7 +98,12 @@ const mapDispatchToProps = dispatch => {
 
 NavBar.propTypes = {
   isAutheticated: PropTypes.bool.isRequired,
+  user: PropTypes.string,
   authLogout: PropTypes.func.isRequired,
+};
+
+NavBar.defaultProps = {
+  user: null,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavBar);

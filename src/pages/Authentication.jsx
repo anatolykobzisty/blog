@@ -71,18 +71,18 @@ class Authentication extends Component {
   };
 
   render() {
-    const { match, isAutheticated, isLoading, authErrors } = this.props;
+    const { match, isAuthenticated, isLoading } = this.props;
     const isSignUp = match.path === '/blog/signup';
     const pageTitle = isSignUp ? 'Sign Up' : 'Sign In';
     const descriptionLink = isSignUp ? '/blog/login' : '/blog/signup';
     const descriptionText = isSignUp ? 'Have an account?' : 'Need an account?';
-    const errorMsgUsername = authErrors.username ? authErrors.username[0] : null;
-    const errorMsgEmail = authErrors.email ? authErrors.email[0] : null;
-    const errorMsgLogin = authErrors['email or password']
-      ? authErrors['email or password'][0]
-      : null;
+    // const errorMsgUsername = authErrors.username ? authErrors.username[0] : null;
+    // const errorMsgEmail = authErrors.email ? authErrors.email[0] : null;
+    // const errorMsgLogin = authErrors['email or password']
+    //   ? authErrors['email or password'][0]
+    //   : null;
 
-    if (isAutheticated) {
+    if (isAuthenticated) {
       return <Redirect to="/blog" />;
     }
 
@@ -95,8 +95,8 @@ class Authentication extends Component {
           </DescriptionLink>
           <Formik
             initialValues={{
-              username: 'noname2020',
-              email: 'noname2020@mail.com',
+              username: 'noname-2020',
+              email: 'noname-2020@mail.com',
               password: '8Nkl8dsp',
             }}
             onSubmit={values => this.handleFormSubmit(values, isSignUp)}
@@ -116,9 +116,9 @@ class Authentication extends Component {
                         onBlur={handleBlur}
                         prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                       />
-                      {errorMsgUsername && (
+                      {/* {errorMsgUsername && (
                         <ErrorMessage>Username {errorMsgUsername} </ErrorMessage>
-                      )}
+                      )} */}
                       {touched.username && errors.username && (
                         <ErrorMessage>{errors.username}</ErrorMessage>
                       )}
@@ -134,7 +134,7 @@ class Authentication extends Component {
                       onBlur={handleBlur}
                       prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
                     />
-                    {errorMsgEmail && <ErrorMessage>Email {errorMsgEmail} </ErrorMessage>}
+                    {/* {errorMsgEmail && <ErrorMessage>Email {errorMsgEmail} </ErrorMessage>} */}
                     {touched.email && errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
                   </FormItem>
                   <FormItem>
@@ -147,9 +147,9 @@ class Authentication extends Component {
                       onBlur={handleBlur}
                       prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                     />
-                    {errorMsgLogin && (
+                    {/* {errorMsgLogin && (
                       <ErrorMessage>Email or password {errorMsgLogin} </ErrorMessage>
-                    )}
+                    )} */}
                     {touched.password && errors.password && (
                       <ErrorMessage>{errors.password}</ErrorMessage>
                     )}
@@ -169,9 +169,8 @@ class Authentication extends Component {
 
 const mapStateToProps = ({ auth }) => {
   return {
-    isAutheticated: !!auth.token,
+    isAuthenticated: !!auth.currentUser.token,
     isLoading: auth.loading,
-    authErrors: auth.errors,
   };
 };
 
@@ -184,9 +183,9 @@ const mapDispatchToProps = dispatch => {
 
 Authentication.propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,
-  isAutheticated: PropTypes.bool.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  authErrors: PropTypes.objectOf(PropTypes.array).isRequired,
+  // authErrors: PropTypes.objectOf(PropTypes.array).isRequired,
   authLogin: PropTypes.func.isRequired,
   authRegister: PropTypes.func.isRequired,
 };

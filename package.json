@@ -22,7 +22,7 @@
     "yup": "^0.28.1"
   },
   "scripts": {
-    "start": "BROWSER=none react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "lint": "node_modules/.bin/eslint --ext jsx src",
     "lint:fix": "node_modules/.bin/eslint --fix --ext jsx src",
