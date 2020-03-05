@@ -5,7 +5,6 @@ import styled from 'styled-components/macro';
 
 const ErrorMessages = styled.ul`
   color: red;
-  list-style: square;
 `;
 
 const BackendErrorMessages = ({ backendErrors }) => {
