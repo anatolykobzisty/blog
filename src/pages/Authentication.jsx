@@ -79,7 +79,9 @@ class Authentication extends Component {
             {({ handleSubmit, values, handleChange, handleBlur }) => {
               return (
                 <Form onSubmit={handleSubmit}>
-                  {isSignUp && error && <BackendErrorMessages backendErrors={error.errors} />}
+                  {isSignUp && error && !error.errors['email or password'] && (
+                    <BackendErrorMessages backendErrors={error.errors} />
+                  )}
                   {isSignUp && (
                     <FormItem>
                       <Input
