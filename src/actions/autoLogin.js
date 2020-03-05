@@ -1,4 +1,5 @@
 import axios from '../axios';
+
 import { AUTO_LOGIN_REQUEST, AUTO_LOGIN_SUCCESS, AUTO_LOGIN_FAILURE } from './actionTypes';
 
 export const autoLoginRequest = () => {
