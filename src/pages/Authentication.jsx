@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-
-import PropTypes from 'prop-types';
-
+import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 
 import { Icon, Input, Button } from 'antd';
 import { Formik, Form } from 'formik';
 
 import styled from 'styled-components/macro';
+
+import BackendErrorMessages from './components/BackendErrorMessages';
 
 import { register } from '../actions/register';
 import { login } from '../actions/login';
@@ -40,10 +40,6 @@ const FormItem = styled.div`
   margin-bottom: 20px;
 `;
 
-const ErrorMessage = styled.div`
-  color: red;
-`;
-
 class Authentication extends Component {
   handleFormSubmit = (values, isSignUp) => {
     const { authLogin, authRegister } = this.props;
@@ -55,16 +51,11 @@ class Authentication extends Component {
   };
 
   render() {
-    const { match, isAuthenticated, isLoading } = this.props;
+    const { match, isAuthenticated, isLoading, error } = this.props;
     const isSignUp = match.path === '/blog/signup';
     const pageTitle = isSignUp ? 'Sign Up' : 'Sign In';
     const descriptionLink = isSignUp ? '/blog/login' : '/blog/signup';
     const descriptionText = isSignUp ? 'Have an account?' : 'Need an account?';
-    // const errorMsgUsername = authErrors.username ? authErrors.username[0] : null;
-    // const errorMsgEmail = authErrors.email ? authErrors.email[0] : null;
-    // const errorMsgLogin = authErrors['email or password']
-    //   ? authErrors['email or password'][0]
-    //   : null;
 
     if (isAuthenticated) {
       return <Redirect to="/blog" />;
@@ -79,15 +70,18 @@ class Authentication extends Component {
           </DescriptionLink>
           <Formik
             initialValues={{
-              username: 'noname-2020',
-              email: 'noname-2020@mail.com',
-              password: '8Nkl8dsp',
+              username: '',
+              email: '',
+              password: '',
             }}
             onSubmit={values => this.handleFormSubmit(values, isSignUp)}
           >
             {({ handleSubmit, values, handleChange, handleBlur }) => {
               return (
                 <Form onSubmit={handleSubmit}>
+                  {isSignUp && error && error.errors.username && error.errors.email && (
+                    <BackendErrorMessages backendErrors={error.errors} />
+                  )}
                   {isSignUp && (
                     <FormItem>
                       <Input
@@ -99,10 +93,10 @@ class Authentication extends Component {
                         onBlur={handleBlur}
                         prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                       />
-                      {/* {errorMsgUsername && (
-                        <ErrorMessage>Username {errorMsgUsername} </ErrorMessage>
-                      )} */}
                     </FormItem>
+                  )}
+                  {!isSignUp && error && error.errors['email or password'] && (
+                    <BackendErrorMessages backendErrors={error.errors} />
                   )}
                   <FormItem>
                     <Input
@@ -114,7 +108,6 @@ class Authentication extends Component {
                       onBlur={handleBlur}
                       prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
                     />
-                    {/* {errorMsgEmail && <ErrorMessage>Email {errorMsgEmail} </ErrorMessage>} */}
                   </FormItem>
                   <FormItem>
                     <Input
@@ -126,9 +119,6 @@ class Authentication extends Component {
                       onBlur={handleBlur}
                       prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                     />
-                    {/* {errorMsgLogin && (
-                      <ErrorMessage>Email or password {errorMsgLogin} </ErrorMessage>
-                    )} */}
                   </FormItem>
                   <Button type="primary" htmlType="submit" loading={isLoading} block>
                     {pageTitle}
@@ -147,6 +137,7 @@ const mapStateToProps = ({ auth }) => {
   return {
     isAuthenticated: !!auth.currentUser.token,
     isLoading: auth.loading,
+    error: auth.error,
   };
 };
 
@@ -161,9 +152,13 @@ Authentication.propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  // authErrors: PropTypes.objectOf(PropTypes.array).isRequired,
+  error: PropTypes.objectOf(PropTypes.objectOf(PropTypes.array)),
   authLogin: PropTypes.func.isRequired,
   authRegister: PropTypes.func.isRequired,
+};
+
+Authentication.defaultProps = {
+  error: null,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Authentication);

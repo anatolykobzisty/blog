@@ -14,6 +14,7 @@ import {
 const initialState = {
   currentUser: {},
   loading: false,
+  error: null,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -33,6 +34,7 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
+        error: action.error,
       };
     case LOGIN_REQUEST:
       return {
@@ -49,6 +51,7 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
+        error: action.error,
       };
     case AUTO_LOGIN_REQUEST:
       return {

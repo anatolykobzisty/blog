@@ -15,10 +15,10 @@ export const registerSuccess = user => {
   };
 };
 
-export const registerFailure = errors => {
+export const registerFailure = error => {
   return {
     type: REGISTER_FAILURE,
-    errors,
+    error,
   };
 };
 
@@ -38,7 +38,7 @@ export const register = ({ username, email, password }) => async dispatch => {
     localStorage.setItem('token', token);
     dispatch(registerSuccess(user));
   } catch (error) {
-    const { errors } = error.response.data;
-    dispatch(registerFailure(errors));
+    console.log(error.response.data);
+    dispatch(registerFailure(error.response.data));
   }
 };

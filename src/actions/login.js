@@ -14,10 +14,10 @@ export const loginSuccess = user => {
   };
 };
 
-export const loginFailure = errors => {
+export const loginFailure = error => {
   return {
     type: LOGIN_FAILURE,
-    errors,
+    error,
   };
 };
 
@@ -36,7 +36,6 @@ export const login = ({ email, password }) => async dispatch => {
     localStorage.setItem('token', token);
     dispatch(loginSuccess(user));
   } catch (error) {
-    const { errors } = error.response.data;
-    dispatch(loginFailure(errors));
+    dispatch(loginFailure(error.response.data));
   }
 };
