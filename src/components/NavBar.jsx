@@ -9,7 +9,7 @@ import styled from 'styled-components/macro';
 import logout from '../actions/logout';
 
 const StyledNavBar = styled.div`
-  width: 100%;
+  width: 1100px;
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-between;

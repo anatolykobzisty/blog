@@ -14,17 +14,18 @@ import Content from './Content';
 import { autoLogin } from '../actions/autoLogin';
 
 const Page = styled.div`
-  width: 1100px;
+  width: 100%;
   margin: 0 auto;
 `;
 
 const Header = styled.header`
   height: 60px;
   display: flex;
-  flex-wrap: nowrap;
+  justify-content: center;
   align-items: center;
   background: #1890ff;
   color: #ffffff;
+  margin-bottom: 40px;
   padding: 0 20px;
 `;
 

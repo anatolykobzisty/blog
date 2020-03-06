@@ -19,7 +19,7 @@ const StyledAuthentication = styled.div`
 `;
 
 const Container = styled.div`
-  width: 320px;
+  width: 400px;
   display: flex;
   flex-direction: column;
 `;

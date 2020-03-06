@@ -6,6 +6,7 @@ import styled from 'styled-components/macro';
 import { Authentication, GlobalFeed } from '../pages';
 
 const StyledContent = styled.main`
+  height: 100vh;
   padding: 0 20px;
 `;
 
