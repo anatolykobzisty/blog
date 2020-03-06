@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import axios from '../axios';
 
 import { AUTO_LOGIN_REQUEST, AUTO_LOGIN_SUCCESS, AUTO_LOGIN_FAILURE } from './actionTypes';
@@ -28,12 +29,27 @@ export const autoLogin = () => async dispatch => {
     axios.defaults.headers.common.Authorization = `Token ${token}`;
     try {
       const response = await axios('/user/');
-      const user = await response.data.user;
-      console.log(user);
-      dispatch(autoLoginSuccess(user));
+      if (response.status === 200) {
+        const user = await response.data.user;
+        dispatch(autoLoginSuccess(user));
+        console.log(user);
+      }
     } catch (error) {
-      // const { errors } = error.response.data;
-      dispatch(autoLoginFailure());
+      if (error.response.status === 404) {
+        dispatch(autoLoginFailure());
+        message.error('Not found requests');
+      } else if (error.response.status === 403) {
+        dispatch(autoLoginFailure());
+        message.error('Forbidden requests');
+      } else if (error.response.status === 401) {
+        dispatch(autoLoginFailure());
+        message.error('Unauthorized requests');
+      } else {
+        dispatch(autoLoginFailure());
+        message.error('Something went wrong');
+      }
     }
+  } else {
+    dispatch(autoLoginFailure());
   }
 };
