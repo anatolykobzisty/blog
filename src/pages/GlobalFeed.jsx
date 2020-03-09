@@ -46,7 +46,7 @@ export class GlobalFeed extends Component {
     });
     const { showArticles } = this.props;
     const offset = page * 10 - pageSize;
-    showArticles(offset, pageSize, page);
+    showArticles(offset, pageSize);
   };
 
   render() {
@@ -85,7 +85,7 @@ const mapStateToProps = ({ multipleArticles }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    showArticles: (offset, pageSize, page) => dispatch(getArticles(offset, pageSize, page)),
+    showArticles: (offset, pageSize) => dispatch(getArticles(offset, pageSize)),
   };
 };
 

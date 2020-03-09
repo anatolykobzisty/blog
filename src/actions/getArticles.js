@@ -24,11 +24,11 @@ export const getArticlesFailure = (error = null) => {
   };
 };
 
-export const getArticles = (offset = 0, pageSize = 10, page) => async dispatch => {
+export const getArticles = (offset = 0, pageSize = 10) => async dispatch => {
   dispatch(getArticlesRequest());
   if (navigator.onLine) {
     try {
-      const response = await axios.get(`/articles?page=${page}`, {
+      const response = await axios.get('/articles', {
         params: {
           offset,
           limit: pageSize,
