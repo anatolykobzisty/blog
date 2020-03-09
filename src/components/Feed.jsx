@@ -31,6 +31,7 @@ const AvatarAuthorArticle = styled.div`
   height: 45px;
   margin-right: 15px;
   border: 1px solid #1890ff;
+  overflow: hidden;
 `;
 
 const Info = styled.div``;
@@ -71,6 +72,7 @@ const Tag = styled.li`
   background-color: #1890ff;
   padding: 5px 10px;
   margin-right: 10px;
+  margin-bottom: 10px;
 `;
 
 const Feed = ({ articles }) => {
@@ -81,7 +83,7 @@ const Feed = ({ articles }) => {
           <ArticlePreview>
             <ArticleMeta>
               <AvatarAuthorArticle>
-                <img src={article.author.image} alt="" />
+                <img width="45px" height="45px" src={article.author.image} alt="" />
               </AvatarAuthorArticle>
               <Info>
                 <NameAuthorArticle>{article.author.username}</NameAuthorArticle>

@@ -14,7 +14,7 @@ const Content = () => {
   return (
     <StyledContent>
       <Switch>
-        <Route path="/blog" component={GlobalFeed} exact />
+        <Route path="/blog/" component={GlobalFeed} exact />
         <Route path="/blog/login" component={Authentication} />
         <Route path="/blog/signup" component={Authentication} />
       </Switch>

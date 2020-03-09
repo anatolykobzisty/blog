@@ -24,11 +24,16 @@ export const getArticlesFailure = (error = null) => {
   };
 };
 
-export const getArticles = () => async dispatch => {
+export const getArticles = (offset = 0, pageSize = 10, page) => async dispatch => {
   dispatch(getArticlesRequest());
   if (navigator.onLine) {
     try {
-      const response = await axios.get('/articles?limit=10&offset=0');
+      const response = await axios.get(`/articles?page=${page}`, {
+        params: {
+          offset,
+          limit: pageSize,
+        },
+      });
       if (response.status === 200) {
         const articles = await response.data.articles;
         const articlesCount = await response.data.articlesCount;
