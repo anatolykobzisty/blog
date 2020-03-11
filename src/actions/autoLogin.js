@@ -32,7 +32,6 @@ export const autoLogin = () => async dispatch => {
       if (response.status === 200) {
         const user = await response.data.user;
         dispatch(autoLoginSuccess(user));
-        console.log(user);
       }
     } catch (error) {
       if (error.response.status === 404) {

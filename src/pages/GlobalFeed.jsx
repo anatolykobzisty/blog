@@ -13,6 +13,7 @@ const StyledGlobalFeed = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 40px;
 `;
 
 const Loader = styled.div`
@@ -55,7 +56,7 @@ export class GlobalFeed extends Component {
     return (
       <>
         <StyledGlobalFeed>
-          {isLoading && <Loader>Loading news feed...</Loader>}
+          {isLoading && <Loader>Loading...</Loader>}
           {error && <ErrorMessage>Some error happened</ErrorMessage>}
           {!isLoading && articles && (
             <>

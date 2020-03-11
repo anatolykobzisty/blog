@@ -53,13 +53,13 @@ const NavBar = ({ isAutheticated, user, authLogout }) => {
     <StyledNavBar>
       <Logo to="/blog">Blog</Logo>
       <Menu>
-        {isAutheticated ? null : (
+        <MenuItem>
+          <StyledNavLink to="/blog" exact>
+            Home
+          </StyledNavLink>
+        </MenuItem>
+        {!isAutheticated && (
           <>
-            <MenuItem>
-              <StyledNavLink to="/blog" exact>
-                Home
-              </StyledNavLink>
-            </MenuItem>
             <MenuItem>
               <StyledNavLink to="/blog/login">Sign in</StyledNavLink>
             </MenuItem>
@@ -68,8 +68,11 @@ const NavBar = ({ isAutheticated, user, authLogout }) => {
             </MenuItem>
           </>
         )}
-        {isAutheticated ? (
+        {isAutheticated && (
           <>
+            <MenuItem>
+              <StyledNavLink to="/articles/new">New Post</StyledNavLink>
+            </MenuItem>
             <MenuItem>
               <Button onClick={handleClick}>Log out</Button>
             </MenuItem>
@@ -77,7 +80,7 @@ const NavBar = ({ isAutheticated, user, authLogout }) => {
               <span>{user}</span>
             </MenuItem>
           </>
-        ) : null}
+        )}
       </Menu>
     </StyledNavBar>
   );

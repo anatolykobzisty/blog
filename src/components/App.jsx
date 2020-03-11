@@ -25,7 +25,6 @@ const Header = styled.header`
   align-items: center;
   background: #1890ff;
   color: #ffffff;
-  margin-bottom: 40px;
   padding: 0 20px;
 `;
 

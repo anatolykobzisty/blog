@@ -1,9 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
-import { formatDistance } from 'date-fns';
 import { connect } from 'react-redux';
+import { formatDistance } from 'date-fns';
+
 import styled from 'styled-components/macro';
+
+import TagList from './TagList';
 
 const Article = styled.div`
   width: 900px;
@@ -62,19 +65,6 @@ const ArticleFooter = styled.div`
   justify-content: flex-end;
 `;
 
-const Taglist = styled.ul`
-  display: flex;
-  flex-wrap: wrap;
-`;
-
-const Tag = styled.li`
-  color: white;
-  background-color: #1890ff;
-  padding: 5px 10px;
-  margin-right: 10px;
-  margin-bottom: 10px;
-`;
-
 const Feed = ({ articles }) => {
   return (
     <>
@@ -95,17 +85,12 @@ const Feed = ({ articles }) => {
               </Info>
             </ArticleMeta>
           </ArticlePreview>
-          <Link to={`/articles/${article.slug}`}>
+          <Link to={`blog/articles/${article.slug}`}>
             <ArticleContent>
               <ArticleTitle>{article.title}</ArticleTitle>
               <ArticleDescription>{article.description}</ArticleDescription>
               <ArticleFooter>
-                <Taglist>
-                  {article.tagList.map(tag => (
-                    <Tag key={tag}>{tag}</Tag>
-                  ))}
-                  <Tag>test</Tag>
-                </Taglist>
+                <TagList tags={article.tagList} />
               </ArticleFooter>
             </ArticleContent>
           </Link>

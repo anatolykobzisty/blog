@@ -13,7 +13,12 @@ export const AUTO_LOGIN_FAILURE = 'AUTO_LOGIN_FAILURE';
 
 export const LOGOUT = 'LOGOUT';
 
-// articles
+// multipleArticles
 export const GET_ARTICLES_REQUEST = 'GET_ARTICLES_REQUEST';
 export const GET_ARTICLES_SUCCESS = 'GET_ARTICLES_SUCCESS';
 export const GET_ARTICLES_FAILURE = 'GET_ARTICLES_FAILURE';
+
+// singleArticle
+export const GET_ARTICLE_REQUEST = 'GET_ARTICLE_REQUEST';
+export const GET_ARTICLE_SUCCESS = 'GET_ARTICLE_SUCCESS';
+export const GET_ARTICLE_FAILURE = 'GET_ARTICLE_FAILURE';
