@@ -8,9 +8,11 @@ import styled from 'styled-components/macro';
 import Taglist from '../components/TagList';
 
 import { getArticle } from '../actions/getArticle';
+import cleanArticle from '../actions/cleanArticle';
 
 const StyledArticle = styled.div`
   display: flex;
+  flex-wrap: wrap;
   flex-direction: column;
   align-items: center;
 `;
@@ -73,10 +75,15 @@ const ArticleContent = styled.div`
   padding-top: 30px;
 `;
 
+const ArticleBody = styled.div``;
+
+const Body = styled.p``;
+
 class Article extends Component {
   componentDidMount() {
-    const { match, showArticle } = this.props;
+    const { match, showArticle, cleanPrevArticle } = this.props;
     const { slug } = match.params;
+    cleanPrevArticle();
     showArticle(slug);
   }
 
@@ -109,9 +116,9 @@ class Article extends Component {
               </Banner>
               <ArticleContent>
                 <Container>
-                  <div>
-                    <p>{article.body}</p>
-                  </div>
+                  <ArticleBody>
+                    <Body>{article.body}</Body>
+                  </ArticleBody>
                   <Taglist tags={article.tagList} />
                 </Container>
               </ArticleContent>
@@ -134,6 +141,7 @@ const mapStateToProps = ({ singleArticle }) => {
 const mapDispatchToProps = dispatch => {
   return {
     showArticle: slug => dispatch(getArticle(slug)),
+    cleanPrevArticle: () => dispatch(cleanArticle()),
   };
 };
 
@@ -143,6 +151,7 @@ Article.propTypes = {
   error: PropTypes.objectOf(PropTypes.any),
   article: PropTypes.objectOf(PropTypes.any).isRequired,
   showArticle: PropTypes.func.isRequired,
+  cleanPrevArticle: PropTypes.func.isRequired,
 };
 
 Article.defaultProps = {

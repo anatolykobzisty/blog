@@ -2,11 +2,16 @@ import {
   GET_ARTICLE_REQUEST,
   GET_ARTICLE_SUCCESS,
   GET_ARTICLE_FAILURE,
+  ADD_ARTICLE_REQUEST,
+  ADD_ARTICLE_SUCCESS,
+  ADD_ARTICLE_FAILURE,
+  CLEAN_ARTICLE,
 } from '../actions/actionTypes';
 
 const initialState = {
   article: {},
   loading: false,
+  isSubmitted: false,
   error: null,
 };
 
@@ -16,7 +21,6 @@ const singleArticleReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
-        article: {},
       };
     case GET_ARTICLE_SUCCESS:
       return {
@@ -29,6 +33,30 @@ const singleArticleReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: action.error,
+      };
+    case ADD_ARTICLE_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ADD_ARTICLE_SUCCESS:
+      return {
+        ...state,
+        article: action.article,
+        loading: false,
+        isSubmitted: true,
+      };
+    case ADD_ARTICLE_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+      };
+    case CLEAN_ARTICLE:
+      return {
+        ...state,
+        article: {},
+        isSubmitted: false,
       };
     default:
       return state;

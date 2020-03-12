@@ -23,7 +23,6 @@ const TagList = ({ tags }) => {
         {tags.map(tag => (
           <Tag key={tag}>{tag}</Tag>
         ))}
-        <Tag>test</Tag>
       </StyledTaglist>
     </>
   );

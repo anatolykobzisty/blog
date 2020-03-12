@@ -71,7 +71,7 @@ const NavBar = ({ isAutheticated, user, authLogout }) => {
         {isAutheticated && (
           <>
             <MenuItem>
-              <StyledNavLink to="/articles/new">New Post</StyledNavLink>
+              <StyledNavLink to="/blog/articles/new">New Post</StyledNavLink>
             </MenuItem>
             <MenuItem>
               <Button onClick={handleClick}>Log out</Button>

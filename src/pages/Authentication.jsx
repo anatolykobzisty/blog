@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { Icon, Input, Button } from 'antd';
@@ -51,7 +51,7 @@ class Authentication extends Component {
   };
 
   render() {
-    const { match, isAuthenticated, isLoading, error } = this.props;
+    const { match, isAuthenticated, error } = this.props;
     const isSignUp = match.path === '/blog/signup';
     const pageTitle = isSignUp ? 'Sign Up' : 'Sign In';
     const descriptionLink = isSignUp ? '/blog/login' : '/blog/signup';
@@ -120,7 +120,7 @@ class Authentication extends Component {
                       prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                     />
                   </FormItem>
-                  <Button type="primary" htmlType="submit" loading={isLoading} block>
+                  <Button type="primary" htmlType="submit" block>
                     {pageTitle}
                   </Button>
                 </Form>
@@ -151,7 +151,6 @@ const mapDispatchToProps = dispatch => {
 Authentication.propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
-  isLoading: PropTypes.bool.isRequired,
   error: PropTypes.objectOf(PropTypes.objectOf(PropTypes.array)),
   authLogin: PropTypes.func.isRequired,
   authRegister: PropTypes.func.isRequired,
