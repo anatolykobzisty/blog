@@ -8,6 +8,7 @@ import { Pagination } from 'antd';
 import Feed from '../components/Feed';
 
 import { getArticles } from '../actions/getArticles';
+import cleanArticle from '../actions/cleanArticle';
 
 const StyledGlobalFeed = styled.div`
   display: flex;
@@ -37,7 +38,8 @@ export class GlobalFeed extends Component {
   };
 
   componentDidMount = () => {
-    const { showArticles } = this.props;
+    const { showArticles, cleanPrevArticle } = this.props;
+    cleanPrevArticle();
     showArticles();
   };
 
@@ -87,6 +89,7 @@ const mapStateToProps = ({ multipleArticles }) => {
 const mapDispatchToProps = dispatch => {
   return {
     showArticles: (offset, pageSize) => dispatch(getArticles(offset, pageSize)),
+    cleanPrevArticle: () => dispatch(cleanArticle()),
   };
 };
 
@@ -95,6 +98,7 @@ GlobalFeed.propTypes = {
   error: PropTypes.objectOf(PropTypes.any),
   articles: PropTypes.arrayOf(PropTypes.any).isRequired,
   showArticles: PropTypes.func.isRequired,
+  cleanPrevArticle: PropTypes.func.isRequired,
   articlesCount: PropTypes.number,
 };
 

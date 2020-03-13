@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { formatDistance } from 'date-fns';
 
@@ -9,6 +9,7 @@ import styled from 'styled-components/macro';
 import Taglist from '../components/TagList';
 
 import { getArticle } from '../actions/getArticle';
+import { deleteArticle } from '../actions/deleteArticle';
 import cleanArticle from '../actions/cleanArticle';
 
 const StyledArticle = styled.div`
@@ -73,12 +74,26 @@ const DateArticle = styled.span`
   font-size: 12px;
 `;
 
-const Button = styled(Link)`
+const ButtonEdit = styled(Link)`
   border: 1px solid #1890ff;
   display: inline-block;
-  padding: 5px 15px;
+  padding: 5px 10px;
   text-decoration: none;
   color: #1890ff;
+  margin-right: 10px;
+  :hover {
+    background-color: #1890ff;
+    color: white;
+  }
+`;
+
+const ButtonDelete = styled.button`
+  padding: 5px 10px;
+  font: inherit;
+  border: 1px solid #1890ff;
+  background-color: white;
+  color: #1890ff;
+  cursor: pointer;
   :hover {
     background-color: #1890ff;
     color: white;
@@ -102,43 +117,53 @@ class Article extends Component {
   }
 
   isAuthor = () => {
-    const { currentUser, article } = this.props;
-    if (!Object.keys(article).length || !Object.keys(currentUser).length) {
+    const { currentUser, fetchArticle } = this.props;
+    if (!Object.keys(fetchArticle).length || !Object.keys(currentUser).length) {
       return false;
     }
-    return article.author.username === currentUser.username;
+    return fetchArticle.author.username === currentUser.username;
+  };
+
+  handleClick = () => {
+    const { match, delArticle, history } = this.props;
+    const { slug } = match.params;
+    delArticle(slug);
+    history.push('/blog');
   };
 
   render() {
-    const { article, error, isLoading } = this.props;
+    const { fetchArticle, fetchArticleIsError, fetchArticleIsLoading } = this.props;
 
     return (
       <>
         <StyledArticle>
-          {isLoading && <Loader>Loading...</Loader>}
-          {error && <ErrorMessage>Some error happened</ErrorMessage>}
-          {!isLoading && Object.keys(article).length && (
+          {fetchArticleIsLoading && <Loader>Loading...</Loader>}
+          {fetchArticleIsError && <ErrorMessage>Some error happened</ErrorMessage>}
+          {!fetchArticleIsLoading && Object.keys(fetchArticle).length && (
             <>
               <Banner>
                 <Container>
-                  <ArticleTitle>{article.title}</ArticleTitle>
+                  <ArticleTitle>{fetchArticle.title}</ArticleTitle>
                   <ArticleMeta>
                     <div>
                       <AvatarAuthorArticle>
-                        <img width="45px" height="45px" src={article.author.image} alt="" />
+                        <img width="45px" height="45px" src={fetchArticle.author.image} alt="" />
                       </AvatarAuthorArticle>
                       <Info>
-                        <NameAuthorArticle>{article.author.username}</NameAuthorArticle>
+                        <NameAuthorArticle>{fetchArticle.author.username}</NameAuthorArticle>
                         <DateArticle>
-                          {`Created ${formatDistance(new Date(article.createdAt), new Date(), {
+                          {`Created ${formatDistance(new Date(fetchArticle.createdAt), new Date(), {
                             addSuffix: true,
                           })}`}
                         </DateArticle>
                       </Info>
                     </div>
-                    {!isLoading && this.isAuthor() && (
+                    {!fetchArticleIsLoading && this.isAuthor() && (
                       <span>
-                        <Button to={`/blog/articles/${article.slug}/edit`}>edit</Button>
+                        <ButtonEdit to={`/blog/articles/${fetchArticle.slug}/edit`}>
+                          Edit Article
+                        </ButtonEdit>
+                        <ButtonDelete onClick={this.handleClick}>Delete Article</ButtonDelete>
                       </span>
                     )}
                   </ArticleMeta>
@@ -147,9 +172,9 @@ class Article extends Component {
               <ArticleContent>
                 <Container>
                   <ArticleBody>
-                    <Body>{article.body}</Body>
+                    <Body>{fetchArticle.body}</Body>
                   </ArticleBody>
-                  <Taglist tags={article.tagList} />
+                  <Taglist tags={fetchArticle.tagList} />
                 </Container>
               </ArticleContent>
             </>
@@ -162,9 +187,9 @@ class Article extends Component {
 
 const mapStateToProps = ({ auth, singleArticle }) => {
   return {
-    isLoading: singleArticle.loading,
-    error: singleArticle.error,
-    article: singleArticle.article,
+    fetchArticleIsLoading: singleArticle.loading,
+    fetchArticleIsError: singleArticle.error,
+    fetchArticle: singleArticle.article,
     currentUser: auth.currentUser,
   };
 };
@@ -172,22 +197,26 @@ const mapStateToProps = ({ auth, singleArticle }) => {
 const mapDispatchToProps = dispatch => {
   return {
     showArticle: slug => dispatch(getArticle(slug)),
+    delArticle: slug => dispatch(deleteArticle(slug)),
     cleanPrevArticle: () => dispatch(cleanArticle()),
   };
 };
 
 Article.propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,
-  isLoading: PropTypes.bool.isRequired,
-  error: PropTypes.objectOf(PropTypes.any),
-  article: PropTypes.objectOf(PropTypes.any).isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
+  fetchArticleIsLoading: PropTypes.bool.isRequired,
+  fetchArticleIsError: PropTypes.objectOf(PropTypes.any),
+  fetchArticle: PropTypes.objectOf(PropTypes.any),
   currentUser: PropTypes.objectOf(PropTypes.any).isRequired,
   showArticle: PropTypes.func.isRequired,
+  delArticle: PropTypes.func.isRequired,
   cleanPrevArticle: PropTypes.func.isRequired,
 };
 
 Article.defaultProps = {
-  error: null,
+  fetchArticleIsError: null,
+  fetchArticle: {},
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Article);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Article));

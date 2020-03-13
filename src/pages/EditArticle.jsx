@@ -11,7 +11,6 @@ import ArticleForm from '../components/ArticleForm';
 
 import { editArticle } from '../actions/editArticle';
 import { getArticle } from '../actions/getArticle';
-import cleanArticle from '../actions/cleanArticle';
 
 const StyledEditArticle = styled.div`
   display: flex;
@@ -20,9 +19,8 @@ const StyledEditArticle = styled.div`
 
 class EditArticle extends Component {
   componentDidMount = () => {
-    const { match, fetchArticle, cleanPrevArticle } = this.props;
+    const { match, fetchArticle } = this.props;
     const { slug } = match.params;
-    cleanPrevArticle();
     fetchArticle(slug);
   };
 
@@ -79,7 +77,6 @@ const mapDispatchToProps = dispatch => {
   return {
     updateArticle: (slug, values) => dispatch(editArticle(slug, values)),
     fetchArticle: slug => dispatch(getArticle(slug)),
-    cleanPrevArticle: () => dispatch(cleanArticle()),
   };
 };
 
@@ -90,7 +87,6 @@ EditArticle.propTypes = {
   article: PropTypes.objectOf(PropTypes.any).isRequired,
   isSubmitted: PropTypes.bool.isRequired,
   fetchArticle: PropTypes.func.isRequired,
-  cleanPrevArticle: PropTypes.func.isRequired,
   updateArticle: PropTypes.func.isRequired,
 };
 

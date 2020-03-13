@@ -8,6 +8,9 @@ import {
   EDIT_ARTICLE_REQUEST,
   EDIT_ARTICLE_SUCCESS,
   EDIT_ARTICLE_FAILURE,
+  DELETE_ARTICLE_REQUEST,
+  DELETE_ARTICLE_SUCCESS,
+  DELETE_ARTICLE_FAILURE,
   CLEAN_ARTICLE,
 } from '../actions/actionTypes';
 
@@ -63,7 +66,6 @@ const singleArticleReducer = (state = initialState, action) => {
     case EDIT_ARTICLE_SUCCESS:
       return {
         ...state,
-        article: action.article,
         loading: false,
         isSubmitted: true,
       };
@@ -73,10 +75,28 @@ const singleArticleReducer = (state = initialState, action) => {
         loading: false,
         error: action.error,
       };
+    case DELETE_ARTICLE_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case DELETE_ARTICLE_SUCCESS:
+      return {
+        ...state,
+        article: action.article,
+        isSubmitted: true,
+        loading: false,
+      };
+    case DELETE_ARTICLE_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+      };
     case CLEAN_ARTICLE:
       return {
         ...state,
-        article: {},
+        // article: {},
         isSubmitted: false,
         error: null,
       };
