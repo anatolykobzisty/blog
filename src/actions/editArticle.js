@@ -1,29 +1,29 @@
 import { message } from 'antd';
 import axios from '../axios';
-import { ADD_ARTICLE_REQUEST, ADD_ARTICLE_SUCCESS, ADD_ARTICLE_FAILURE } from './actionTypes';
+import { EDIT_ARTICLE_REQUEST, EDIT_ARTICLE_SUCCESS, EDIT_ARTICLE_FAILURE } from './actionTypes';
 
-export const addArticleRequest = () => {
+export const editArticleRequest = () => {
   return {
-    type: ADD_ARTICLE_REQUEST,
+    type: EDIT_ARTICLE_REQUEST,
   };
 };
 
-export const addArticleSuccess = article => {
+export const editArticleSuccess = article => {
   return {
-    type: ADD_ARTICLE_SUCCESS,
+    type: EDIT_ARTICLE_SUCCESS,
     article,
   };
 };
 
-export const addArticleFailure = (error = null) => {
+export const editArticleFailure = (error = null) => {
   return {
-    type: ADD_ARTICLE_FAILURE,
+    type: EDIT_ARTICLE_FAILURE,
     error,
   };
 };
 
-export const addArticle = ({ title, description, body, tagList }) => async dispatch => {
-  dispatch(addArticleRequest());
+export const editArticle = (slug, { title, description, body, tagList }) => async dispatch => {
+  dispatch(editArticleRequest());
   const articleData = {
     article: {
       title,
@@ -34,30 +34,30 @@ export const addArticle = ({ title, description, body, tagList }) => async dispa
   };
   if (navigator.onLine) {
     try {
-      const response = await axios.post('/articles', articleData);
+      const response = await axios.put(`/articles/${slug}`, articleData);
       if (response.status === 200) {
         const article = await response.data.article;
-        dispatch(addArticleSuccess(article));
+        dispatch(editArticleSuccess(article));
       }
     } catch (error) {
       if (error.response.status === 404) {
-        dispatch(addArticleFailure());
+        dispatch(editArticleFailure());
         message.error('Not found requests');
       } else if (error.response.status === 403) {
-        dispatch(addArticleFailure());
+        dispatch(editArticleFailure());
         message.error('Forbidden requests');
       } else if (error.response.status === 401) {
-        dispatch(addArticleFailure());
+        dispatch(editArticleFailure());
         message.error('Unauthorized requests');
       } else if (error.response.status === 422) {
-        dispatch(addArticleFailure(error.response.data));
+        dispatch(editArticleFailure(error.response.data));
       } else {
-        dispatch(addArticleFailure());
+        dispatch(editArticleFailure());
         message.error('Something went wrong');
       }
     }
   } else {
-    dispatch(addArticleFailure());
+    dispatch(editArticleFailure());
     message.error('Please check your network connectivity');
   }
 };

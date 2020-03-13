@@ -33,13 +33,13 @@ class CreateArticle extends Component {
     }
     return (
       <>
-        {isLoading && <Loader />}
-        <StyledCreateArticle>
-          <ArticleForm
-            handleFormSubmit={this.handleFormSubmit}
-            errors={(error && error.errors) || {}}
-          />
-        </StyledCreateArticle>
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <StyledCreateArticle>
+            <ArticleForm handleFormSubmit={this.handleFormSubmit} error={error} />
+          </StyledCreateArticle>
+        )}
       </>
     );
   }

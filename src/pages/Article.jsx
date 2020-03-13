@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { formatDistance } from 'date-fns';
 
@@ -49,6 +50,7 @@ const ArticleTitle = styled.h1`
 
 const ArticleMeta = styled.div`
   display: flex;
+  justify-content: space-between;
   margin-bottom: 15px;
 `;
 
@@ -71,6 +73,18 @@ const DateArticle = styled.span`
   font-size: 12px;
 `;
 
+const Button = styled(Link)`
+  border: 1px solid #1890ff;
+  display: inline-block;
+  padding: 5px 15px;
+  text-decoration: none;
+  color: #1890ff;
+  :hover {
+    background-color: #1890ff;
+    color: white;
+  }
+`;
+
 const ArticleContent = styled.div`
   padding-top: 30px;
 `;
@@ -87,8 +101,17 @@ class Article extends Component {
     showArticle(slug);
   }
 
+  isAuthor = () => {
+    const { currentUser, article } = this.props;
+    if (!Object.keys(article).length || !Object.keys(currentUser).length) {
+      return false;
+    }
+    return article.author.username === currentUser.username;
+  };
+
   render() {
     const { article, error, isLoading } = this.props;
+
     return (
       <>
         <StyledArticle>
@@ -100,17 +123,24 @@ class Article extends Component {
                 <Container>
                   <ArticleTitle>{article.title}</ArticleTitle>
                   <ArticleMeta>
-                    <AvatarAuthorArticle>
-                      <img width="45px" height="45px" src={article.author.image} alt="" />
-                    </AvatarAuthorArticle>
-                    <Info>
-                      <NameAuthorArticle>{article.author.username}</NameAuthorArticle>
-                      <DateArticle>
-                        {`Created ${formatDistance(new Date(article.createdAt), new Date(), {
-                          addSuffix: true,
-                        })}`}
-                      </DateArticle>
-                    </Info>
+                    <div>
+                      <AvatarAuthorArticle>
+                        <img width="45px" height="45px" src={article.author.image} alt="" />
+                      </AvatarAuthorArticle>
+                      <Info>
+                        <NameAuthorArticle>{article.author.username}</NameAuthorArticle>
+                        <DateArticle>
+                          {`Created ${formatDistance(new Date(article.createdAt), new Date(), {
+                            addSuffix: true,
+                          })}`}
+                        </DateArticle>
+                      </Info>
+                    </div>
+                    {!isLoading && this.isAuthor() && (
+                      <span>
+                        <Button to={`/blog/articles/${article.slug}/edit`}>edit</Button>
+                      </span>
+                    )}
                   </ArticleMeta>
                 </Container>
               </Banner>
@@ -130,11 +160,12 @@ class Article extends Component {
   }
 }
 
-const mapStateToProps = ({ singleArticle }) => {
+const mapStateToProps = ({ auth, singleArticle }) => {
   return {
     isLoading: singleArticle.loading,
     error: singleArticle.error,
     article: singleArticle.article,
+    currentUser: auth.currentUser,
   };
 };
 
@@ -150,6 +181,7 @@ Article.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   error: PropTypes.objectOf(PropTypes.any),
   article: PropTypes.objectOf(PropTypes.any).isRequired,
+  currentUser: PropTypes.objectOf(PropTypes.any).isRequired,
   showArticle: PropTypes.func.isRequired,
   cleanPrevArticle: PropTypes.func.isRequired,
 };

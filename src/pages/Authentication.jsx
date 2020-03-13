@@ -8,7 +8,7 @@ import { Formik, Form } from 'formik';
 
 import styled from 'styled-components/macro';
 
-import BackendErrorMessages from './components/BackendErrorMessages';
+import BackendErrorMessages from '../components/BackendErrorMessages';
 
 import { register } from '../actions/register';
 import { login } from '../actions/login';

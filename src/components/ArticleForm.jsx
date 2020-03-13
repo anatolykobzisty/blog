@@ -7,6 +7,8 @@ import { Formik, Form, Field, FieldArray } from 'formik';
 
 import styled from 'styled-components/macro';
 
+import BackendErrorMessages from './BackendErrorMessages';
+
 const { TextArea } = Input;
 
 const StyledArticleForm = styled.div`
@@ -36,24 +38,25 @@ const TagInput = ({ field, ...props }) => {
   );
 };
 
-const ArticleForm = ({ handleFormSubmit }) => {
+const ArticleForm = ({
+  handleFormSubmit,
+  error,
+  updateValues = {
+    title: '',
+    description: '',
+    body: '',
+    tagList: [],
+  },
+}) => {
   return (
     <>
       <StyledArticleForm>
         <Container>
-          <Formik
-            initialValues={{
-              title: '',
-              description: '',
-              body: '',
-              tagList: [],
-            }}
-            onSubmit={values => handleFormSubmit(values)}
-          >
+          <Formik onSubmit={values => handleFormSubmit(values)} initialValues={updateValues}>
             {({ handleSubmit, values, handleChange, handleBlur }) => {
               return (
-                // BackendErrorMessages
                 <Form onSubmit={handleSubmit}>
+                  {error && error.errors && <BackendErrorMessages backendErrors={error.errors} />}
                   <FormItem>
                     <Input
                       name="title"
@@ -125,10 +128,22 @@ const ArticleForm = ({ handleFormSubmit }) => {
 
 ArticleForm.propTypes = {
   handleFormSubmit: PropTypes.func.isRequired,
+  error: PropTypes.objectOf(PropTypes.objectOf(PropTypes.array)),
+  updateValues: PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+    body: PropTypes.string,
+    tagList: PropTypes.array,
+  }),
 };
 
 TagInput.propTypes = {
   field: PropTypes.objectOf(PropTypes.any).isRequired,
+};
+
+ArticleForm.defaultProps = {
+  updateValues: {},
+  error: null,
 };
 
 export default ArticleForm;
