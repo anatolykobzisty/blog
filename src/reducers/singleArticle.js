@@ -18,7 +18,6 @@ import {
 const initialState = {
   article: {},
   loading: false,
-  loadingAddToFavorites: false,
   isSubmitted: false,
   error: null,
 };

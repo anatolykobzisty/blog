@@ -9,7 +9,6 @@ const initialState = {
   articles: [],
   articlesCount: null,
   loading: false,
-  loadingAddToFavorites: false,
 };
 
 const multipleArticlesReducer = (state = initialState, action) => {
