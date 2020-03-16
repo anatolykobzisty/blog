@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://anatolykobzisty.github.io/blog/",
   "dependencies": {
+    "@ant-design/icons": "^4.0.2",
     "antd": "^3.26.9",
     "axios": "^0.19.1",
     "date-fns": "^2.9.0",

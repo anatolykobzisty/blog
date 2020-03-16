@@ -2,13 +2,14 @@ import {
   GET_ARTICLES_REQUEST,
   GET_ARTICLES_SUCCESS,
   GET_ARTICLES_FAILURE,
+  HANDLE_LIKE_ARTICLE_SUCCESS,
 } from '../actions/actionTypes';
 
 const initialState = {
   articles: [],
   articlesCount: null,
   loading: false,
-  error: null,
+  loadingAddToFavorites: false,
 };
 
 const multipleArticlesReducer = (state = initialState, action) => {
@@ -30,6 +31,15 @@ const multipleArticlesReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: action.error,
+      };
+    case HANDLE_LIKE_ARTICLE_SUCCESS:
+      return {
+        ...state,
+        article: action.article,
+        articles: state.articles.map(article =>
+          article.slug === action.article.slug ? action.article : article
+        ),
+        loadingAddToFavorites: false,
       };
     default:
       return state;

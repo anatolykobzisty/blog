@@ -11,12 +11,14 @@ import {
   DELETE_ARTICLE_REQUEST,
   DELETE_ARTICLE_SUCCESS,
   DELETE_ARTICLE_FAILURE,
+  HANDLE_LIKE_ARTICLE_SUCCESS,
   CLEAN_ARTICLE,
 } from '../actions/actionTypes';
 
 const initialState = {
   article: {},
   loading: false,
+  loadingAddToFavorites: false,
   isSubmitted: false,
   error: null,
 };
@@ -93,10 +95,14 @@ const singleArticleReducer = (state = initialState, action) => {
         loading: false,
         error: action.error,
       };
+    case HANDLE_LIKE_ARTICLE_SUCCESS:
+      return {
+        ...state,
+        article: action.article,
+      };
     case CLEAN_ARTICLE:
       return {
         ...state,
-        // article: {},
         isSubmitted: false,
         error: null,
       };

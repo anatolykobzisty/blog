@@ -7,6 +7,7 @@ import { formatDistance } from 'date-fns';
 import styled from 'styled-components/macro';
 
 import Taglist from '../components/TagList';
+import AddToFavorites from '../components/AddToFavorites';
 
 import { getArticle } from '../actions/getArticle';
 import { deleteArticle } from '../actions/deleteArticle';
@@ -44,6 +45,7 @@ const Container = styled.div`
 `;
 
 const ArticleTitle = styled.h1`
+  word-wrap: break-word;
   font-size: 44px;
   margin: 0;
   margin-bottom: 20px;
@@ -104,9 +106,21 @@ const ArticleContent = styled.div`
   padding-top: 30px;
 `;
 
-const ArticleBody = styled.div``;
+const ArticleBody = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+`;
 
-const Body = styled.p``;
+const BodyWrap = styled.div`
+  width: 100%;
+  padding: 10px;
+  padding-top: 0;
+`;
+
+const Body = styled.p`
+  word-wrap: break-word;
+`;
 
 class Article extends Component {
   componentDidMount() {
@@ -172,7 +186,14 @@ class Article extends Component {
               <ArticleContent>
                 <Container>
                   <ArticleBody>
-                    <Body>{fetchArticle.body}</Body>
+                    <BodyWrap>
+                      <Body>{fetchArticle.body}</Body>
+                    </BodyWrap>
+                    <AddToFavorites
+                      isFavorited={fetchArticle.favorited}
+                      favoritesCount={fetchArticle.favoritesCount}
+                      slug={fetchArticle.slug}
+                    />
                   </ArticleBody>
                   <Taglist tags={fetchArticle.tagList} />
                 </Container>

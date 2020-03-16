@@ -7,6 +7,7 @@ import { formatDistance } from 'date-fns';
 import styled from 'styled-components/macro';
 
 import TagList from './TagList';
+import AddToFavorites from './AddToFavorites';
 
 const Article = styled.div`
   width: 900px;
@@ -26,6 +27,7 @@ const ArticlePreview = styled.div``;
 
 const ArticleMeta = styled.div`
   display: flex;
+  justify-content: space-between;
   margin-bottom: 15px;
 `;
 
@@ -48,16 +50,20 @@ const DateArticle = styled.span`
   font-size: 12px;
 `;
 
-const ArticleContent = styled.div``;
+const ArticleContent = styled.div`
+  width: 100%;
+`;
 
 const ArticleTitle = styled.h1`
   font-size: 24px;
+  word-wrap: break-word;
   margin: 0;
 `;
 
 const ArticleDescription = styled.p`
   color: black;
   font-size: 15px;
+  word-wrap: break-word;
 `;
 
 const ArticleFooter = styled.div`
@@ -72,17 +78,24 @@ const Feed = ({ articles }) => {
         <Article key={article.createdAt}>
           <ArticlePreview>
             <ArticleMeta>
-              <AvatarAuthorArticle>
-                <img width="45px" height="45px" src={article.author.image} alt="" />
-              </AvatarAuthorArticle>
-              <Info>
-                <NameAuthorArticle>{article.author.username}</NameAuthorArticle>
-                <DateArticle>
-                  {`Created ${formatDistance(new Date(article.createdAt), new Date(), {
-                    addSuffix: true,
-                  })}`}
-                </DateArticle>
-              </Info>
+              <div>
+                <AvatarAuthorArticle>
+                  <img width="45px" height="45px" src={article.author.image} alt="" />
+                </AvatarAuthorArticle>
+                <Info>
+                  <NameAuthorArticle>{article.author.username}</NameAuthorArticle>
+                  <DateArticle>
+                    {`Created ${formatDistance(new Date(article.createdAt), new Date(), {
+                      addSuffix: true,
+                    })}`}
+                  </DateArticle>
+                </Info>
+              </div>
+              <AddToFavorites
+                isFavorited={article.favorited}
+                favoritesCount={article.favoritesCount}
+                slug={article.slug}
+              />
             </ArticleMeta>
           </ArticlePreview>
           <Link to={`blog/articles/${article.slug}`}>
