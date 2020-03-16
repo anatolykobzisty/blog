@@ -98,7 +98,7 @@ const Feed = ({ articles }) => {
               />
             </ArticleMeta>
           </ArticlePreview>
-          <Link to={`blog/articles/${article.slug}`}>
+          <Link to={`/blog/articles/${article.slug}`}>
             <ArticleContent>
               <ArticleTitle>{article.title}</ArticleTitle>
               <ArticleDescription>{article.description}</ArticleDescription>
