@@ -21,11 +21,6 @@ const Loader = styled.div`
   color: #1890ff;
 `;
 
-const ErrorMessage = styled.div`
-  font-size: 16px;
-  color: #1890ff;
-`;
-
 const StyledPagination = styled(Pagination)`
   margin-top: 30px;
   margin-bottom: 30px;
@@ -52,12 +47,11 @@ export class GlobalFeed extends Component {
 
   render() {
     const { current } = this.state;
-    const { isLoading, error, articles, articlesCount } = this.props;
+    const { isLoading, articles, articlesCount } = this.props;
     return (
       <>
         <StyledGlobalFeed>
           {isLoading && <Loader>Loading...</Loader>}
-          {error && <ErrorMessage>Some error happened</ErrorMessage>}
           {!isLoading && articles && (
             <>
               <Feed articles={articles} />
@@ -78,7 +72,6 @@ export class GlobalFeed extends Component {
 const mapStateToProps = ({ multipleArticles }) => {
   return {
     isLoading: multipleArticles.loading,
-    error: multipleArticles.error,
     articles: multipleArticles.articles,
     articlesCount: multipleArticles.articlesCount,
   };
@@ -92,14 +85,12 @@ const mapDispatchToProps = dispatch => {
 
 GlobalFeed.propTypes = {
   isLoading: PropTypes.bool.isRequired,
-  error: PropTypes.objectOf(PropTypes.any),
   articles: PropTypes.arrayOf(PropTypes.any).isRequired,
   showArticles: PropTypes.func.isRequired,
   articlesCount: PropTypes.number,
 };
 
 GlobalFeed.defaultProps = {
-  error: null,
   articlesCount: null,
 };
 

@@ -3,6 +3,7 @@ import { PropTypes } from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import pick from 'lodash/pick';
+import size from 'lodash/size';
 
 import styled from 'styled-components/macro';
 
@@ -11,6 +12,7 @@ import ArticleForm from '../components/ArticleForm';
 
 import { editArticle } from '../actions/editArticle';
 import { getArticle } from '../actions/getArticle';
+import cleanArticle from '../actions/cleanArticle';
 
 const StyledEditArticle = styled.div`
   display: flex;
@@ -18,6 +20,10 @@ const StyledEditArticle = styled.div`
 `;
 
 class EditArticle extends Component {
+  state = {
+    isSubmitted: false,
+  };
+
   componentDidMount = () => {
     const { match, fetchArticle } = this.props;
     const { slug } = match.params;
@@ -26,7 +32,7 @@ class EditArticle extends Component {
 
   setUpdateValuesForm() {
     const { article } = this.props;
-    if (Object.keys(article).length) {
+    if (size(article)) {
       const updateValuesForm = pick(article, ['title', 'description', 'body', 'tagList']);
       return updateValuesForm;
     }
@@ -37,12 +43,19 @@ class EditArticle extends Component {
     const { match, updateArticle } = this.props;
     const { slug } = match.params;
     updateArticle(slug, values);
+    this.setState({ isSubmitted: true });
   };
 
   render() {
-    const { article, error, isLoading, isSubmitted } = this.props;
+    const { article, error, isLoading } = this.props;
+    const { isSubmitted } = this.state;
+    const token = localStorage.getItem('token');
 
-    if (isSubmitted) {
+    if (!token) {
+      return <Redirect to="/blog/" />;
+    }
+
+    if (isSubmitted && size(article)) {
       return <Redirect to={`/blog/articles/${article.slug}`} />;
     }
 
@@ -69,7 +82,6 @@ const mapStateToProps = ({ singleArticle }) => {
     isLoading: singleArticle.loading,
     error: singleArticle.error,
     article: singleArticle.article,
-    isSubmitted: singleArticle.isSubmitted,
   };
 };
 
@@ -77,6 +89,7 @@ const mapDispatchToProps = dispatch => {
   return {
     updateArticle: (slug, values) => dispatch(editArticle(slug, values)),
     fetchArticle: slug => dispatch(getArticle(slug)),
+    emptyArticle: () => dispatch(cleanArticle()),
   };
 };
 
@@ -85,7 +98,6 @@ EditArticle.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   error: PropTypes.objectOf(PropTypes.any),
   article: PropTypes.objectOf(PropTypes.any).isRequired,
-  isSubmitted: PropTypes.bool.isRequired,
   fetchArticle: PropTypes.func.isRequired,
   updateArticle: PropTypes.func.isRequired,
 };

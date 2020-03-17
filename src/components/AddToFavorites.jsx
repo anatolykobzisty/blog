@@ -11,11 +11,30 @@ const StyledAddToFavorites = styled(Button)`
   width: 60px;
 `;
 
-const AddToFavorites = ({ isFavorited, favoritesCount, slug, handleAddToFavorites }) => {
+const AddToFavorites = ({
+  isFavorited,
+  favoritesCount,
+  slug,
+  handleAddToFavorites,
+  isLoading,
+  articleResponse,
+  slugResponse,
+}) => {
+  // const isFavoritedWithResponse =
+  //   Object.keys(articleResponse).length && slug === slugResponse
+  //     ? articleResponse.favorited
+  //     : isFavorited;
+
+  // const favoritesCountWithResponse =
+  //   Object.keys(articleResponse).length && slug === slugResponse
+  //     ? articleResponse.favoritesCount
+  //     : favoritesCount;
+
   const handleClick = () => {
     const method = isFavorited ? 'delete' : 'post';
     handleAddToFavorites(method, slug);
   };
+
   return (
     <>
       <StyledAddToFavorites onClick={handleClick}>
@@ -32,6 +51,15 @@ const AddToFavorites = ({ isFavorited, favoritesCount, slug, handleAddToFavorite
   );
 };
 
+const mapStateToProps = ({ singleArticle }) => {
+  return {
+    isLoading: singleArticle.loadingAddToFavorites,
+    // articleResponse: singleArticle.article,
+    // slugResponse: singleArticle.article.slug,
+    // favoritesCountWithResponse: singleArticle.article.favoritesCount,
+  };
+};
+
 const mapDispatchToProps = dispatch => {
   return {
     handleAddToFavorites: (method, slug) => dispatch(handleLikeArticle(method, slug)),
@@ -45,4 +73,4 @@ AddToFavorites.propTypes = {
   handleAddToFavorites: PropTypes.func.isRequired,
 };
 
-export default connect(null, mapDispatchToProps)(AddToFavorites);
+export default connect(mapStateToProps, mapDispatchToProps)(AddToFavorites);

@@ -11,13 +11,16 @@ import {
   DELETE_ARTICLE_REQUEST,
   DELETE_ARTICLE_SUCCESS,
   DELETE_ARTICLE_FAILURE,
+  HANDLE_LIKE_ARTICLE_REQUEST,
   HANDLE_LIKE_ARTICLE_SUCCESS,
+  HANDLE_LIKE_ARTICLE_FAILURE,
+  CLEAN_ARTICLE,
 } from '../actions/actionTypes';
 
 const initialState = {
   article: {},
   loading: false,
-  isSubmitted: false,
+  loadingAddToFavorites: false,
   error: null,
 };
 
@@ -27,7 +30,6 @@ const singleArticleReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
-        isSubmitted: false,
       };
     case GET_ARTICLE_SUCCESS:
       return {
@@ -51,7 +53,6 @@ const singleArticleReducer = (state = initialState, action) => {
         ...state,
         article: action.article,
         loading: false,
-        isSubmitted: true,
       };
     case ADD_ARTICLE_FAILURE:
       return {
@@ -67,8 +68,8 @@ const singleArticleReducer = (state = initialState, action) => {
     case EDIT_ARTICLE_SUCCESS:
       return {
         ...state,
+        article: action.article,
         loading: false,
-        isSubmitted: true,
       };
     case EDIT_ARTICLE_FAILURE:
       return {
@@ -84,8 +85,7 @@ const singleArticleReducer = (state = initialState, action) => {
     case DELETE_ARTICLE_SUCCESS:
       return {
         ...state,
-        article: action.article,
-        isSubmitted: true,
+        article: {},
         loading: false,
       };
     case DELETE_ARTICLE_FAILURE:
@@ -94,10 +94,26 @@ const singleArticleReducer = (state = initialState, action) => {
         loading: false,
         error: action.error,
       };
+    case HANDLE_LIKE_ARTICLE_REQUEST:
+      return {
+        ...state,
+        loadingAddToFavorites: true,
+      };
     case HANDLE_LIKE_ARTICLE_SUCCESS:
       return {
         ...state,
         article: action.article,
+        loadingAddToFavorites: false,
+      };
+    case HANDLE_LIKE_ARTICLE_FAILURE:
+      return {
+        ...state,
+        loadingAddToFavorites: false,
+      };
+    case CLEAN_ARTICLE:
+      return {
+        ...state,
+        article: {},
       };
     default:
       return state;
