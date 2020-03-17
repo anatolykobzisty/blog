@@ -11,7 +11,6 @@ import AddToFavorites from '../components/AddToFavorites';
 
 import { getArticle } from '../actions/getArticle';
 import { deleteArticle } from '../actions/deleteArticle';
-import cleanArticle from '../actions/cleanArticle';
 
 const StyledArticle = styled.div`
   display: flex;
@@ -124,9 +123,8 @@ const Body = styled.p`
 
 class Article extends Component {
   componentDidMount() {
-    const { match, showArticle, cleanPrevArticle } = this.props;
+    const { match, showArticle } = this.props;
     const { slug } = match.params;
-    cleanPrevArticle();
     showArticle(slug);
   }
 
@@ -219,7 +217,6 @@ const mapDispatchToProps = dispatch => {
   return {
     showArticle: slug => dispatch(getArticle(slug)),
     delArticle: slug => dispatch(deleteArticle(slug)),
-    cleanPrevArticle: () => dispatch(cleanArticle()),
   };
 };
 
@@ -232,7 +229,6 @@ Article.propTypes = {
   currentUser: PropTypes.objectOf(PropTypes.any).isRequired,
   showArticle: PropTypes.func.isRequired,
   delArticle: PropTypes.func.isRequired,
-  cleanPrevArticle: PropTypes.func.isRequired,
 };
 
 Article.defaultProps = {

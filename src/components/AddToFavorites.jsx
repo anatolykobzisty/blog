@@ -9,9 +9,6 @@ import { handleLikeArticle } from '../actions/handleLikeArticle';
 
 const StyledAddToFavorites = styled(Button)`
   width: 60px;
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
 `;
 
 const AddToFavorites = ({ isFavorited, favoritesCount, slug, handleAddToFavorites }) => {

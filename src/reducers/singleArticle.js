@@ -12,7 +12,6 @@ import {
   DELETE_ARTICLE_SUCCESS,
   DELETE_ARTICLE_FAILURE,
   HANDLE_LIKE_ARTICLE_SUCCESS,
-  CLEAN_ARTICLE,
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -28,6 +27,7 @@ const singleArticleReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
+        isSubmitted: false,
       };
     case GET_ARTICLE_SUCCESS:
       return {
@@ -98,12 +98,6 @@ const singleArticleReducer = (state = initialState, action) => {
       return {
         ...state,
         article: action.article,
-      };
-    case CLEAN_ARTICLE:
-      return {
-        ...state,
-        isSubmitted: false,
-        error: null,
       };
     default:
       return state;
