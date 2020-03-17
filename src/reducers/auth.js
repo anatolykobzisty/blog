@@ -5,9 +5,9 @@ import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
-  AUTO_LOGIN_REQUEST,
-  AUTO_LOGIN_SUCCESS,
-  AUTO_LOGIN_FAILURE,
+  GET_USER_REQUEST,
+  GET_USER_SUCCESS,
+  GET_USER_FAILURE,
   LOGOUT,
 } from '../actions/actionTypes';
 
@@ -53,18 +53,18 @@ const authReducer = (state = initialState, action) => {
         loading: false,
         error: action.error,
       };
-    case AUTO_LOGIN_REQUEST:
+    case GET_USER_REQUEST:
       return {
         ...state,
         loading: true,
       };
-    case AUTO_LOGIN_SUCCESS:
+    case GET_USER_SUCCESS:
       return {
         ...state,
         currentUser: action.user,
         loading: false,
       };
-    case AUTO_LOGIN_FAILURE:
+    case GET_USER_FAILURE:
       return {
         ...state,
         loading: false,

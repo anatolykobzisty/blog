@@ -11,7 +11,7 @@ import Loader from './Loader';
 import NavBar from './NavBar';
 import Content from './Content';
 
-import { autoLogin } from '../actions/autoLogin';
+import { getUser } from '../actions/getUser';
 
 const Page = styled.div`
   width: 100%;
@@ -30,8 +30,8 @@ const Header = styled.header`
 
 class App extends Component {
   componentDidMount = () => {
-    const { authAutoLogin } = this.props;
-    authAutoLogin();
+    const { getCurrentUser } = this.props;
+    getCurrentUser();
   };
 
   render() {
@@ -65,12 +65,12 @@ const mapStateToProps = ({ auth }) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  authAutoLogin: () => dispatch(autoLogin()),
+  getCurrentUser: () => dispatch(getUser()),
 });
 
 App.propTypes = {
   isLoading: PropTypes.bool.isRequired,
-  authAutoLogin: PropTypes.func.isRequired,
+  getCurrentUser: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
