@@ -11,25 +11,7 @@ const StyledAddToFavorites = styled(Button)`
   width: 60px;
 `;
 
-const AddToFavorites = ({
-  isFavorited,
-  favoritesCount,
-  slug,
-  handleAddToFavorites,
-  isLoading,
-  articleResponse,
-  slugResponse,
-}) => {
-  // const isFavoritedWithResponse =
-  //   Object.keys(articleResponse).length && slug === slugResponse
-  //     ? articleResponse.favorited
-  //     : isFavorited;
-
-  // const favoritesCountWithResponse =
-  //   Object.keys(articleResponse).length && slug === slugResponse
-  //     ? articleResponse.favoritesCount
-  //     : favoritesCount;
-
+const AddToFavorites = ({ isFavorited, favoritesCount, slug, handleAddToFavorites, isLoading }) => {
   const handleClick = () => {
     const method = isFavorited ? 'delete' : 'post';
     handleAddToFavorites(method, slug);
@@ -37,15 +19,17 @@ const AddToFavorites = ({
 
   return (
     <>
-      <StyledAddToFavorites onClick={handleClick}>
-        <>
-          <Icon
-            type="heart"
-            theme={isFavorited ? 'filled' : 'outlined'}
-            style={{ fontSize: '13px', color: '#1890ff' }}
-          />
-          <span>&nbsp;{favoritesCount}</span>
-        </>
+      <StyledAddToFavorites onClick={handleClick} loading={isLoading}>
+        {!isLoading ? (
+          <>
+            <Icon
+              type="heart"
+              theme={isFavorited ? 'filled' : 'outlined'}
+              style={{ fontSize: '13px', color: '#1890ff' }}
+            />
+            <span>&nbsp;{favoritesCount}</span>
+          </>
+        ) : null}
       </StyledAddToFavorites>
     </>
   );
@@ -54,9 +38,6 @@ const AddToFavorites = ({
 const mapStateToProps = ({ singleArticle }) => {
   return {
     isLoading: singleArticle.loadingAddToFavorites,
-    // articleResponse: singleArticle.article,
-    // slugResponse: singleArticle.article.slug,
-    // favoritesCountWithResponse: singleArticle.article.favoritesCount,
   };
 };
 
@@ -71,6 +52,7 @@ AddToFavorites.propTypes = {
   favoritesCount: PropTypes.number.isRequired,
   slug: PropTypes.string.isRequired,
   handleAddToFavorites: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddToFavorites);
