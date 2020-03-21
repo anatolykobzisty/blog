@@ -1,5 +1,6 @@
-import { message } from 'antd';
 import axios from '../axios';
+
+import showMessageNetError from '../utils/showMessageNetError';
 
 import { GET_USER_REQUEST, GET_USER_SUCCESS, GET_USER_FAILURE } from './actionTypes';
 
@@ -34,19 +35,8 @@ export const getUser = () => async dispatch => {
         dispatch(getUserSuccess(user));
       }
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(getUserFailure());
-        message.error('Not found requests');
-      } else if (error.response.status === 403) {
-        dispatch(getUserFailure());
-        message.error('Forbidden requests');
-      } else if (error.response.status === 401) {
-        dispatch(getUserFailure());
-        message.error('Unauthorized requests');
-      } else {
-        dispatch(getUserFailure());
-        message.error('Something went wrong');
-      }
+      showMessageNetError(error);
+      dispatch(getUserFailure());
     }
   } else {
     dispatch(getUserFailure());

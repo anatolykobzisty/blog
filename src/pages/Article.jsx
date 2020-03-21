@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, withRouter, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { formatDistance } from 'date-fns';
 import size from 'lodash/size';
@@ -139,6 +139,10 @@ class Article extends Component {
   render() {
     const { article, isLoading } = this.props;
 
+    if (!navigator.onLine) {
+      return <Redirect to="/blog" />;
+    }
+
     return (
       <>
         <StyledArticle>
@@ -198,11 +202,11 @@ class Article extends Component {
   }
 }
 
-const mapStateToProps = ({ auth, singleArticle }) => {
+const mapStateToProps = ({ user, singleArticle }) => {
   return {
     isLoading: singleArticle.loading,
     article: singleArticle.article,
-    currentUser: auth.currentUser,
+    currentUser: user.currentUser,
   };
 };
 

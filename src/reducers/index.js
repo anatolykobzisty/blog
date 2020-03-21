@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
-import authReducer from './auth';
+import userReducer from './user';
 import multipleArticlesReducer from './multipleArticles';
 import singleArticleReducer from './singleArticle';
 
 export default combineReducers({
-  auth: authReducer,
+  user: userReducer,
   multipleArticles: multipleArticlesReducer,
   singleArticle: singleArticleReducer,
 });

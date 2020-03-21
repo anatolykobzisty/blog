@@ -11,7 +11,14 @@ const StyledAddToFavorites = styled(Button)`
   width: 60px;
 `;
 
-const AddToFavorites = ({ isFavorited, favoritesCount, slug, handleAddToFavorites, isLoading }) => {
+const AddToFavorites = ({
+  isFavorited,
+  favoritesCount,
+  slug,
+  handleAddToFavorites,
+  isLoading,
+  isAuthenticated,
+}) => {
   const handleClick = () => {
     const method = isFavorited ? 'delete' : 'post';
     handleAddToFavorites(method, slug);
@@ -19,7 +26,7 @@ const AddToFavorites = ({ isFavorited, favoritesCount, slug, handleAddToFavorite
 
   return (
     <>
-      <StyledAddToFavorites onClick={handleClick} loading={isLoading}>
+      <StyledAddToFavorites onClick={handleClick} loading={isLoading} disabled={!isAuthenticated}>
         {!isLoading ? (
           <>
             <Icon
@@ -35,9 +42,10 @@ const AddToFavorites = ({ isFavorited, favoritesCount, slug, handleAddToFavorite
   );
 };
 
-const mapStateToProps = ({ singleArticle }) => {
+const mapStateToProps = ({ user, multipleArticles }) => {
   return {
-    isLoading: singleArticle.loadingAddToFavorites,
+    isLoading: multipleArticles.loadingAddToFavorites,
+    isAuthenticated: !!user.currentUser.token,
   };
 };
 
@@ -53,6 +61,7 @@ AddToFavorites.propTypes = {
   slug: PropTypes.string.isRequired,
   handleAddToFavorites: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddToFavorites);

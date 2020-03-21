@@ -1,13 +1,10 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-
-import { Input, Button } from 'antd';
-
 import { Formik, Form, Field, FieldArray } from 'formik';
+import { Input, Button } from 'antd';
+import * as Yup from 'yup';
 
 import styled from 'styled-components/macro';
-
-import BackendErrorMessages from './BackendErrorMessages';
 
 const { TextArea } = Input;
 
@@ -30,6 +27,10 @@ const ButtonWrap = styled.div`
   justify-content: flex-end;
 `;
 
+const ErrorMessage = styled.span`
+  color: red;
+`;
+
 const TagInput = ({ field, ...props }) => {
   return (
     <>
@@ -38,9 +39,15 @@ const TagInput = ({ field, ...props }) => {
   );
 };
 
+const validationSchema = Yup.object().shape({
+  title: Yup.string().required('required'),
+  description: Yup.string().required('required'),
+  body: Yup.string().required('required'),
+  tagList: Yup.array().of(Yup.string()),
+});
+
 const ArticleForm = ({
   handleFormSubmit,
-  error,
   updateValues = {
     title: '',
     description: '',
@@ -52,11 +59,14 @@ const ArticleForm = ({
     <>
       <StyledArticleForm>
         <Container>
-          <Formik onSubmit={values => handleFormSubmit(values)} initialValues={updateValues}>
-            {({ handleSubmit, values, handleChange, handleBlur }) => {
+          <Formik
+            initialValues={updateValues}
+            onSubmit={(values, actions) => handleFormSubmit(values, actions)}
+            validationSchema={validationSchema}
+          >
+            {({ handleSubmit, values, handleChange, handleBlur, touched, errors }) => {
               return (
                 <Form onSubmit={handleSubmit}>
-                  {error && error.errors && <BackendErrorMessages backendErrors={error.errors} />}
                   <FormItem>
                     <Input
                       name="title"
@@ -65,6 +75,9 @@ const ArticleForm = ({
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
+                    {touched.title && errors.title && (
+                      <ErrorMessage>{`title ${errors.title}`}</ErrorMessage>
+                    )}
                   </FormItem>
                   <FormItem>
                     <Input
@@ -74,6 +87,9 @@ const ArticleForm = ({
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
+                    {touched.description && errors.description && (
+                      <ErrorMessage>{`description ${errors.description}`}</ErrorMessage>
+                    )}
                   </FormItem>
                   <FormItem>
                     <TextArea
@@ -85,6 +101,9 @@ const ArticleForm = ({
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
+                    {touched.body && errors.body && (
+                      <ErrorMessage>{`body ${errors.body}`}</ErrorMessage>
+                    )}
                   </FormItem>
                   <FieldArray
                     name="tagList"

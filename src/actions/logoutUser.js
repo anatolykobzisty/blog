@@ -1,11 +1,11 @@
 import axios from '../axios';
-import { LOGOUT } from './actionTypes';
+import { LOGOUT_USER } from './actionTypes';
 
 const logout = () => {
   localStorage.removeItem('token');
   delete axios.defaults.headers.common.Authorization;
   return {
-    type: LOGOUT,
+    type: LOGOUT_USER,
   };
 };
 

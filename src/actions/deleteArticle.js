@@ -1,5 +1,7 @@
 import { message } from 'antd';
 import axios from '../axios';
+import showMessageNetError from '../utils/showMessageNetError';
+
 import {
   DELETE_ARTICLE_REQUEST,
   DELETE_ARTICLE_SUCCESS,
@@ -18,10 +20,9 @@ export const deleteArticleSuccess = () => {
   };
 };
 
-export const deleteArticleFailure = (error = null) => {
+export const deleteArticleFailure = () => {
   return {
     type: DELETE_ARTICLE_FAILURE,
-    error,
   };
 };
 
@@ -34,21 +35,7 @@ export const deleteArticle = slug => async dispatch => {
         dispatch(deleteArticleSuccess());
       }
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(deleteArticleFailure());
-        message.error('Not found requests');
-      } else if (error.response.status === 403) {
-        dispatch(deleteArticleFailure());
-        message.error('Forbidden requests');
-      } else if (error.response.status === 401) {
-        dispatch(deleteArticleFailure());
-        message.error('Unauthorized requests');
-      } else if (error.response.status === 422) {
-        dispatch(deleteArticleFailure(error.response.data));
-      } else {
-        dispatch(deleteArticleFailure());
-        message.error('Something went wrong');
-      }
+      showMessageNetError(error);
     }
   } else {
     dispatch(deleteArticleFailure());

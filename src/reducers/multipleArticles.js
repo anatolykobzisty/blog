@@ -11,6 +11,7 @@ const initialState = {
   articles: [],
   articlesCount: null,
   loading: false,
+  loadingAddToFavorites: false,
 };
 
 const multipleArticlesReducer = (state = initialState, action) => {
@@ -31,7 +32,6 @@ const multipleArticlesReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        error: action.error,
       };
     case HANDLE_LIKE_ARTICLE_REQUEST:
       return {

@@ -1,5 +1,8 @@
 import { message } from 'antd';
 import axios from '../axios';
+
+import showMessageNetError from '../utils/showMessageNetError';
+
 import {
   HANDLE_LIKE_ARTICLE_REQUEST,
   HANDLE_LIKE_ARTICLE_SUCCESS,
@@ -35,19 +38,8 @@ export const handleLikeArticle = (method, slug) => async dispatch => {
         dispatch(handleLikeArticleSuccess(article));
       }
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(handleLikeArticleFailure());
-        message.error('Not found requests');
-      } else if (error.response.status === 403) {
-        dispatch(handleLikeArticleFailure());
-        message.error('Forbidden requests');
-      } else if (error.response.status === 401) {
-        dispatch(handleLikeArticleFailure());
-        message.error('Unauthorized requests');
-      } else {
-        dispatch(handleLikeArticleFailure());
-        message.error('Something went wrong');
-      }
+      showMessageNetError(error);
+      dispatch(handleLikeArticleFailure());
     }
   } else {
     dispatch(handleLikeArticleFailure());

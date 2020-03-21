@@ -1,6 +1,8 @@
 import { message } from 'antd';
 import axios from '../axios';
 
+import showMessageNetError from '../utils/showMessageNetError';
+
 import { GET_ARTICLES_REQUEST, GET_ARTICLES_SUCCESS, GET_ARTICLES_FAILURE } from './actionTypes';
 
 export const getArticlesRequest = () => {
@@ -17,10 +19,9 @@ export const getArticlesSuccess = (articles, articlesCount) => {
   };
 };
 
-export const getArticlesFailure = (error = null) => {
+export const getArticlesFailure = () => {
   return {
     type: GET_ARTICLES_FAILURE,
-    error,
   };
 };
 
@@ -40,21 +41,8 @@ export const getArticles = (offset = 0, pageSize = 10) => async dispatch => {
         dispatch(getArticlesSuccess(articles, articlesCount));
       }
     } catch (error) {
-      if (error.response.status === 404) {
-        dispatch(getArticlesFailure());
-        message.error('Not found requests');
-      } else if (error.response.status === 403) {
-        dispatch(getArticlesFailure());
-        message.error('Forbidden requests');
-      } else if (error.response.status === 401) {
-        dispatch(getArticlesFailure());
-        message.error('Unauthorized requests');
-      } else if (error.response.status === 422) {
-        dispatch(getArticlesFailure(error.response.data));
-      } else {
-        dispatch(getArticlesFailure());
-        message.error('Something went wrong');
-      }
+      showMessageNetError(error);
+      dispatch(getArticlesSuccess());
     }
   } else {
     dispatch(getArticlesFailure());

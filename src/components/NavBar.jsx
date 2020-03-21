@@ -6,7 +6,7 @@ import { Button } from 'antd';
 
 import styled from 'styled-components/macro';
 
-import logout from '../actions/logout';
+import logoutUser from '../actions/logoutUser';
 
 const StyledNavBar = styled.div`
   width: 1100px;
@@ -45,9 +45,9 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
-const NavBar = ({ isAutheticated, user, authLogout }) => {
+const NavBar = ({ isAutheticated, user, logout }) => {
   const handleClick = () => {
-    authLogout();
+    logout();
   };
   return (
     <StyledNavBar>
@@ -86,23 +86,23 @@ const NavBar = ({ isAutheticated, user, authLogout }) => {
   );
 };
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = ({ user }) => {
   return {
-    isAutheticated: !!auth.currentUser.token,
-    user: auth.currentUser.username,
+    isAutheticated: !!user.currentUser.token,
+    user: user.currentUser.username,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    authLogout: () => dispatch(logout()),
+    logout: () => dispatch(logoutUser()),
   };
 };
 
 NavBar.propTypes = {
   isAutheticated: PropTypes.bool.isRequired,
   user: PropTypes.string,
-  authLogout: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired,
 };
 
 NavBar.defaultProps = {
