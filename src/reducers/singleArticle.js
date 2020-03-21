@@ -5,16 +5,13 @@ import {
   DELETE_ARTICLE_REQUEST,
   DELETE_ARTICLE_SUCCESS,
   DELETE_ARTICLE_FAILURE,
-  HANDLE_LIKE_ARTICLE_REQUEST,
-  HANDLE_LIKE_ARTICLE_SUCCESS,
-  HANDLE_LIKE_ARTICLE_FAILURE,
+  HANDLE_LIKE_ARTICLE,
   CLEAN_ARTICLE,
 } from '../actions/actionTypes';
 
 const initialState = {
   article: {},
   loading: false,
-  loadingAddToFavorites: false,
 };
 
 const singleArticleReducer = (state = initialState, action) => {
@@ -51,21 +48,10 @@ const singleArticleReducer = (state = initialState, action) => {
         ...state,
         loading: false,
       };
-    case HANDLE_LIKE_ARTICLE_REQUEST:
-      return {
-        ...state,
-        loadingAddToFavorites: true,
-      };
-    case HANDLE_LIKE_ARTICLE_SUCCESS:
+    case HANDLE_LIKE_ARTICLE:
       return {
         ...state,
         article: action.article,
-        loadingAddToFavorites: false,
-      };
-    case HANDLE_LIKE_ARTICLE_FAILURE:
-      return {
-        ...state,
-        loadingAddToFavorites: false,
       };
     case CLEAN_ARTICLE:
       return {
