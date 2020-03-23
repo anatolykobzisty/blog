@@ -61,6 +61,7 @@ class SignIn extends Component {
         if (response.status === 200) {
           const user = await response.data.user;
           const token = await user.token;
+          axios.defaults.headers.common.Authorization = `Token ${token}`;
           localStorage.setItem('token', token);
           getUser(user);
           actions.setSubmitting(false);
