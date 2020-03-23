@@ -147,7 +147,6 @@ const ArticleForm = ({
 
 ArticleForm.propTypes = {
   handleFormSubmit: PropTypes.func.isRequired,
-  error: PropTypes.objectOf(PropTypes.objectOf(PropTypes.array)),
   updateValues: PropTypes.shape({
     title: PropTypes.string,
     description: PropTypes.string,
@@ -162,7 +161,6 @@ TagInput.propTypes = {
 
 ArticleForm.defaultProps = {
   updateValues: {},
-  error: null,
 };
 
 export default ArticleForm;

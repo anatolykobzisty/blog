@@ -1,5 +1,7 @@
-import axios from 'axios';
+import Axios from 'axios';
 
-export default axios.create({
+const axios = Axios.create({
   baseURL: 'https://conduit.productionready.io/api',
 });
+
+export default axios;

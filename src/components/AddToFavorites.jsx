@@ -68,7 +68,7 @@ class AddToFavorites extends Component {
 
 const mapStateToProps = ({ user }) => {
   return {
-    isAuthenticated: !!user.currentUser.token,
+    isAuthenticated: user.loggedIn,
   };
 };
 

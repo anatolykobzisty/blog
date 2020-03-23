@@ -88,7 +88,7 @@ const NavBar = ({ isAutheticated, user, logout }) => {
 
 const mapStateToProps = ({ user }) => {
   return {
-    isAutheticated: !!user.currentUser.token,
+    isAutheticated: user.loggedIn,
     user: user.currentUser.username,
   };
 };

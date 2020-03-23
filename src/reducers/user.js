@@ -7,6 +7,7 @@ import {
 
 const initialState = {
   currentUser: {},
+  loggedIn: false,
   loading: false,
 };
 
@@ -21,6 +22,7 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         currentUser: action.user,
+        loggedIn: !!localStorage.getItem('token'),
         loading: false,
       };
     case GET_USER_FAILURE:
@@ -32,6 +34,7 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         currentUser: {},
+        loggedIn: false,
       };
     default:
       return state;
